@@ -1,10 +1,11 @@
 @extends ('backend.master')
-@section ('sidebar')
-@include('backend.sidebar')
-@endsection
 
 @section ('navbar')
 @include('backend.navbar')
+@endsection
+
+@section('sidebar')
+@include('backend.sidebar')
 @endsection
 
 @section ('content')
@@ -54,7 +55,7 @@
             <!-- Recent Customers -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-800">Pelanggan Terbaru</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">User Terbaru</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full">

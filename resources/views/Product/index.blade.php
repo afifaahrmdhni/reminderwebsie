@@ -2,7 +2,6 @@
 @section ('sidebar')
 @include('backend.sidebar')
 @endsection
-
 @section ('content')
 
             <!-- Recent Customers -->

@@ -11,7 +11,7 @@ class DashadminController extends Controller
      */
     public function index()
     {
-        return view('Dashboard.index', [
+        return view('dashboard-admin.index', [
             'title' => 'Dashboard',
         ]);
     }
