@@ -3,18 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ReminderCategory;
 
-class ProductController extends Controller
+class ArchiveController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('product-admin.index', [
-            'title' => 'Product admin',
-            'datas' => ReminderCategory::all(),
+        return view('archive-admin.index', [
+            'title' => 'Archive admin',
         ]);
     }
 
@@ -31,14 +29,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
-        ]);
-
-        ReminderCategory::create($validated);
-
-        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan');
+        //
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reminder;
 
 class ReminderController extends Controller
 {
@@ -11,8 +12,8 @@ class ReminderController extends Controller
      */
     public function index()
     {
-        return view('reminders.index', [
-            'title' => 'Reminders',
+        return view('reminders-admin.index', [
+            'title' => 'Reminders admin',
         ]);
     }
 
@@ -29,7 +30,34 @@ class ReminderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title'            => 'required|string|max:255',
+            'category_id'      => 'required|exists:reminder_categories,id',
+            'due_date'         => 'nullable|date',
+            'description'      => 'nullable|string',
+            // pakai sometimes supaya bisa kosong salah satu
+            'recipient_emails' => 'nullable|string',
+            'recipient_phones' => 'nullable|string',
+        ]);
+
+        // cek kalau dua-duanya kosong
+        if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
+            return back()->withErrors(['recipient_emails' => 'Isi minimal satu email atau phone.']);
+        }
+
+        // convert comma string ke array
+        if (!empty($validated['recipient_emails'])) {
+            $validated['recipient_emails'] = array_map('trim', explode(',', $validated['recipient_emails']));
+        }
+        if (!empty($validated['recipient_phones'])) {
+            $validated['recipient_phones'] = array_map('trim', explode(',', $validated['recipient_phones']));
+        }
+
+        $validated['user_id'] = auth()->id();
+
+        Reminder::create($validated);
+
+        return redirect()->route('reminders.index')->with('success', 'Reminder created!');
     }
 
     /**
