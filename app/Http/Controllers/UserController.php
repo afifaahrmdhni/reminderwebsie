@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -11,9 +12,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users-admin.index', [
-            'title' => 'Users admin',
-        ]);
+        $users = User::all();
+        return view('users-admin.index', compact('users'));
     }
 
     /**
@@ -32,17 +32,24 @@ class UserController extends Controller
          $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'nullable|string|min:10|max:15',
             'password' => 'required|string|min:8|confirmed',
+            'role_id' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
         ]);
 
         User::create([
-            'name'=>$request->name,
-            'whatsapp'=>$request->whatsapp,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+            'is_active' => $request->is_active ?? true,
+
         ]);
 
-        return redirect()->back()->with('success', 'User created successfully.');
+        return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
+
     }
 
     /**
