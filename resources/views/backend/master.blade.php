@@ -50,6 +50,7 @@
     @include('backend.navbar')
     <div id="main-content" class="p-4">
       @yield('content')
+      @yield('scripts')
     </div>
   </div>
 
@@ -59,6 +60,9 @@
     const toggleBtn = document.getElementById("toggle-sidebar");
     const links = document.querySelectorAll('#sidebar .nav-link');
     const pageTitle = document.getElementById('page-title');
+
+
+
 
     if (toggleBtn) {
       toggleBtn.addEventListener("click", () => {
@@ -75,6 +79,48 @@
         if (pageTitle) pageTitle.textContent = link.dataset.title;
       });
     });
+  </script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+    lucide.createIcons();
+    });
+  </script>
+
+  <script>
+    const input = document.getElementById('whatsapp');
+
+    if (input) {
+      input.addEventListener('input', function () {
+        let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
+
+        // Ubah awalan 08 jadi +62
+        if (value.startsWith('08')) {
+          value = '+62' + value.slice(2);
+        } else if (value.startsWith('62')) {
+          value = '+62' + value.slice(2);
+        } else if (!value.startsWith('+62')) {
+          value = '+62' + value;
+        }
+
+        // Format jadi +62 XXX-XXXX-XXX
+        const formatted = value
+          .replace(/^(\+62)(\d{3})(\d{4})(\d{3}).*/, '$1 $2-$3-$4');
+
+        input.value = formatted;
+      });
+    }
+
+  </script>
+
+  <script>
+    const input = document.getElementById('password');
+const toggle = document.getElementById('toggle-password');
+
+toggle.addEventListener('click', () => {
+  input.type = input.type === 'password' ? 'text' : 'password';
+});
   </script>
 
   <script src="{{ asset('front-end/js/bootstrap.bundle.min.js') }}"></script>

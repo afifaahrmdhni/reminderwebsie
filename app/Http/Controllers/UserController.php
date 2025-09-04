@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**
@@ -29,7 +29,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        User::create([
+            'name'=>$request->name,
+            'whatsapp'=>$request->whatsapp,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->password),
+        ]);
+
+        return redirect()->back()->with('success', 'User created successfully.');
     }
 
     /**
