@@ -2,18 +2,33 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
     protected $fillable = [
-        'name', 'email', 'password', 'role_id', 'employee_number', 'is_approved'
+        'name',
+        'email',
+        'phone',        // nomor telepon
+        'password',
+        'role_id',      // level 1–3
+        'is_active'     // aktif / nonaktif
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'remember_token'];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
+            'is_active'         => 'boolean',
+        ];
+    }
 
     public function role()
     {
@@ -29,44 +44,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReminderLog::class, 'performed_by');
     }
+
+    // Scope cepat ambil user aktif
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }
-
-// class User extends Authenticatable
-// {
-//     /** @use HasFactory<\Database\Factories\UserFactory> */
-//     use HasFactory, Notifiable;
-
-//     /**
-//      * The attributes that are mass assignable.
-//      *
-//      * @var list<string>
-//      */
-//     protected $fillable = [
-//         'name',
-//         'email',
-//         'password',
-//     ];
-
-//     /**
-//      * The attributes that should be hidden for serialization.
-//      *
-//      * @var list<string>
-//      */
-//     protected $hidden = [
-//         'password',
-//         'remember_token',
-//     ];
-
-//     /**
-//      * Get the attributes that should be cast.
-//      *
-//      * @return array<string, string>
-//      */
-//     protected function casts(): array
-//     {
-//         return [
-//             'email_verified_at' => 'datetime',
-//             'password' => 'hashed',
-//         ];
-//     }
-// }
