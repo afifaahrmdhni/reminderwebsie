@@ -10,22 +10,20 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone')->nullable();      // nomor telepon user
+            $table->string('phone')->nullable();         // nomor telepon user
             $table->string('password');
-            $table->foreignId('role_id')->nullable(); // level/role 1–3
-            $table->boolean('is_active')->default(true); // aktif/nonaktif
+            $table->foreignId('role_id')->nullable();    // kolomnya aja, FK dibuat di migration roles
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
 
-        // Laravel default password reset
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // DB sessions (opsional)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
