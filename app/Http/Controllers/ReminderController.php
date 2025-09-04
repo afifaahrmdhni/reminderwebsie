@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reminder;
+use App\Models\ReminderCategory;
 
 class ReminderController extends Controller
 {
@@ -13,7 +14,8 @@ class ReminderController extends Controller
     public function index()
     {
         return view('reminders-admin.index', [
-            'title' => 'Reminders admin',
+            'title'    => 'Reminders admin',
+            'reminders'=> Reminder::latest()->get(),
         ]);
     }
 
@@ -35,29 +37,31 @@ class ReminderController extends Controller
             'category_id'      => 'required|exists:reminder_categories,id',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string',
-            // pakai sometimes supaya bisa kosong salah satu
             'recipient_emails' => 'nullable|string',
             'recipient_phones' => 'nullable|string',
         ]);
 
-        // cek kalau dua-duanya kosong
+        // minimal salah satu diisi
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
-            return back()->withErrors(['recipient_emails' => 'Isi minimal satu email atau phone.']);
+            return back()->withErrors([
+                'recipient_emails' => 'Isi minimal satu email atau phone.'
+            ]);
         }
 
-        // convert comma string ke array
-        if (!empty($validated['recipient_emails'])) {
-            $validated['recipient_emails'] = array_map('trim', explode(',', $validated['recipient_emails']));
-        }
-        if (!empty($validated['recipient_phones'])) {
-            $validated['recipient_phones'] = array_map('trim', explode(',', $validated['recipient_phones']));
-        }
+        // simpan jadi array JSON
+        $validated['recipient_emails'] = !empty($validated['recipient_emails'])
+            ? array_map('trim', explode(',', $validated['recipient_emails']))
+            : null;
 
-        $validated['user_id'] = auth()->id();
+        $validated['recipient_phones'] = !empty($validated['recipient_phones'])
+            ? array_map('trim', explode(',', $validated['recipient_phones']))
+            : null;
 
         Reminder::create($validated);
 
-        return redirect()->route('reminders.index')->with('success', 'Reminder created!');
+        return redirect()
+            ->route('reminders-admin.index')
+            ->with('success', 'Reminder berhasil dibuat!');
     }
 
     /**

@@ -8,14 +8,25 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name');                 // contoh: Admin, Staff, Viewer
+            $table->unsignedTinyInteger('level');   // 1, 2, 3
             $table->text('description')->nullable();
-            $table->string('slug')->unique();
             $table->timestamps();
+        });
+
+        // ubah tabel users supaya foreign ke roles
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('role_id')
+                  ->nullable()
+                  ->constrained('roles')
+                  ->nullOnDelete();
         });
     }
 
     public function down(): void {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('role_id');
+        });
         Schema::dropIfExists('roles');
     }
 };
