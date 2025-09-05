@@ -48,7 +48,7 @@
 
                                      <div>
                                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                                        <input type="password" id="password" name="password_confirmation" required
+                                        <input type="password" id="password" name="password" required
                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                placeholder="Masukan password">
                                     </div>

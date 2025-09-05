@@ -95,6 +95,10 @@
       input.addEventListener('input', function () {
         let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
 
+
+        //vvalue max, 15 digit
+        value = value.slice(0, 20);
+
         // Ubah awalan 08 jadi +62
         if (value.startsWith('08')) {
           value = '+62' + value.slice(2);
