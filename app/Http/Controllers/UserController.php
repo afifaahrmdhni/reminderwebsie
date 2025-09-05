@@ -31,11 +31,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
         $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
-        'phone' => 'nullable|string|min:10|max:15',
+        'phone' => 'nullable|string|min:10|max:20',
         'password' => 'required|string|min:8',
         'role_id' => 'nullable|integer',
         'is_active' => 'nullable|boolean',

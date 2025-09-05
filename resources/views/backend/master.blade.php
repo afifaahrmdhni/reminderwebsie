@@ -89,33 +89,35 @@
   </script>
 
   <script>
-    const input = document.getElementById('whatsapp');
+     const input = document.getElementById('whatsapp');
 
-    if (input) {
-      input.addEventListener('input', function () {
-        let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
+  if (input) {
+    input.addEventListener('input', function () {
+      let value = input.value.replace(/\D/g, ''); // Hapus semua non-digit
 
+      // Maksimal 15 digit
+      value = value.slice(0, 15);
 
-        //vvalue max, 15 digit
-        value = value.slice(0, 20);
+      // Normalisasi awalan
+      if (value.startsWith('08')) {
+        value = '+62' + value.slice(1); // buang 0, ganti dengan +62
+      } else if (value.startsWith('62')) {
+        value = '+62' + value.slice(2);
+      } else if (!value.startsWith('+62')) {
+        value = '+62' + value;
+      }
 
-        // Ubah awalan 08 jadi +62
-        if (value.startsWith('08')) {
-          value = '+62' + value.slice(2);
-        } else if (value.startsWith('62')) {
-          value = '+62' + value.slice(2);
-        } else if (!value.startsWith('+62')) {
-          value = '+62' + value;
-        }
+      // Format ke +62 XXX-XXXX-XXXX atau sesuai panjang
+      let formatted = value
+        .replace(/^(\+62)(\d{3})(\d{4})(\d{0,4}).*/, function (_, p1, p2, p3, p4) {
+          let result = p1 + " " + p2 + "-" + p3;
+          if (p4) result += "-" + p4;
+          return result;
+        });
 
-        // Format jadi +62 XXX-XXXX-XXX
-        const formatted = value
-          .replace(/^(\+62)(\d{3})(\d{4})(\d{3}).*/, '$1 $2-$3-$4');
-
-        input.value = formatted;
-      });
-    }
-
+      input.value = formatted;
+    });
+  }
   </script>
 
   <script>
