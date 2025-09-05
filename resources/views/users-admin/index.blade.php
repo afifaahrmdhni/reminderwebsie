@@ -48,7 +48,7 @@
 
                                      <div>
                                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                                        <input type="password" id="password" name="password" required
+                                        <input type="password" id="password" name="password_confirmation" required
                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                placeholder="Masukan password">
                                     </div>
@@ -88,8 +88,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->password }}</td>
-
+                                        
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
                                                 <button class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors" onclick="editUser(3)">
