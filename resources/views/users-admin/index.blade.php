@@ -39,9 +39,9 @@
   <select id="role_id" name="role_id" required
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
     <option value="">Pilih role</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
+    <option value="1">Super User</option>
+    <option value="2">Normal User</option>
+    <option value="3">Mid User</option>
   </select>
 
                                     </div>
@@ -85,9 +85,10 @@
                                 <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
                                     @foreach($users as $user)
                                     <tr>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->email }}</td>
+                                        <td class="px-6 py-4 text-left">{{ $user->name }}</td>
+                                        <td class="px-6 py-4 text-left">{{ $user->phone }}</td>
+                                        <td class="px-6 py-4 text-left">{{ $user->email }}</td>
+                                        <td class="px-6 py-4 text-left">{{ $user->role->name }}</td>
                                         
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">

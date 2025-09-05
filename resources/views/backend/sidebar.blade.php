@@ -1,6 +1,6 @@
 <div>
   <div class="d-flex align-items-center justify-content-center bg-primary text-white" style="height: 60px;">
-    <h1 class="h5 fw-bold m-0">Windster</h1>
+    <h1 class="h5 fw-bold m-0">Dashboard</h1>
   </div>
 <nav class="mt-3">
   <ul class="nav flex-column px-2">
