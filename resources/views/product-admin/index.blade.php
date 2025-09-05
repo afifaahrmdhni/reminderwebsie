@@ -18,40 +18,33 @@
                     @include('product-admin.create')
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
+                    <table class="table-auto w-full border-collapse">
+                        <thead class="bg-gray-100">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Icon/Gambar</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Reminder</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Nama</th>
+                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Icon / Gambar</th>
+                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Jumlah Reminder</th>
+                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            {{-- @foreach ($datas as $data) --}}
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Karina</div>
-                                        </div>
-                                    </div>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            @foreach ($datas as $item)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->name }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">{{ $item->icon ?? '-' }}</td>
+
+                                {{-- kalau ada relasi reminders(), hitung jumlahnya --}}
+                                <td class="px-6 py-4 text-sm text-center font-medium text-gray-900">
+                                    {{ $item->reminders_count ?? 0 }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">fasfas</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    <div class="flex space-x-2">
-                                        <!-- Tombol Edit -->
-                                        <a href="" 
-                                        {{-- {{ route('edit', $item->id) }} --}}
+
+                                <td class="px-6 py-4 text-sm text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href=""
                                         class="px-3 py-1 text-sm rounded bg-yellow-500 text-white hover:bg-yellow-600">
                                             Edit
                                         </a>
-
-                                        <!-- Tombol Delete -->
-                                        <form action="" 
-                                        {{-- {{ route('delete', $item->id) }} --}}
-                                        method="POST"
+                                        <form action="" method="POST"
                                             onsubmit="return confirm('Yakin hapus data ini?')">
                                             @csrf
                                             @method('DELETE')
@@ -62,7 +55,8 @@
                                         </form>
                                     </div>
                                 </td>
-                            {{-- @endforeach --}}
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

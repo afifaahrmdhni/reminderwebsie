@@ -10,18 +10,19 @@
                         </div>
                         
                         <div class="p-6">
-                            <form id="user-form" class="space-y-6">
+                            <form  action ="{{ route('users-admin.store') }}" method="POST" id="user-form" class="space-y-6">
+                                @csrf
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div>
                                         <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                                        <input type="text" id="nama" name="nama" required
+                                        <input type="text" id="nama" name="name" required
                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                placeholder="Masukkan nama lengkap">
                                     </div>
                                     
                                     <div>
                                         <label for="no-telp" class="block text-sm font-medium text-gray-700 mb-2">No. Whatsapp</label>
-                                        <input type="tel" id="whatsapp" name="no-telp" required
+                                        <input type="tel" id="whatsapp" name="phone" required
                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                placeholder="08xxxxxxxxxx">
                                     </div>
@@ -33,12 +34,25 @@
                                                placeholder="user@email.com">
                                     </div>
 
+                                    <div> 
+                                         <label for="role_id" class="block text-sm font-medium text-gray-700 mb-2">Role ID</label>
+  <select id="role_id" name="role_id" required
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+    <option value="">Pilih role</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+
+                                    </div>
+
                                      <div>
                                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                                         <input type="password" id="password" name="password" required
                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                                                placeholder="Masukan password">
                                     </div>
+
                                     
                                 </div>
                                 
@@ -64,12 +78,18 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Telepon</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>              
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                                    @foreach($users as $user)
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->phone }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->password }}</td>
+
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
                                                 <button class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors" onclick="editUser(3)">
@@ -80,6 +100,7 @@
                                                 </button>
                                             </div>
                                         </td>
+                                        @endforeach
                                     </tr>
                                 </tbody>
                             </table>

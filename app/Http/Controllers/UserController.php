@@ -29,27 +29,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'nullable|string|min:10|max:15',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'nullable|integer',
-            'is_active' => 'nullable|boolean',
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
-            'is_active' => $request->is_active ?? true,
-
-        ]);
-
-        return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
-
+        //
     }
 
     /**

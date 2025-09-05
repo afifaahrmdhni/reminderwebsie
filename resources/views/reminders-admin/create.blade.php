@@ -13,14 +13,14 @@
           {{-- Name / Type --}}
           <div class="mb-3">
             <label class="form-label">Name / Type</label>
-            <input type="text" class="form-control" name="name" placeholder="e.g., WebApp Domain" required>
+            <input type="text" class="form-control" name="title" placeholder="e.g., WebApp Domain" required>
           </div>
 
           {{-- Category & Expiration --}}
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Category</label>
-              <select class="form-select" name="category" required>
+              <select class="form-select" name="category_id" required>
                 <option value="">Select a category</option>
                 <option value="domain">Domain</option>
                 <option value="license">License</option>
@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Expiration Date</label>
-              <input type="date" class="form-control" name="expiration_date" required>
+              <input type="date" class="form-control" name="due_date" required>
             </div>
           </div>
 
@@ -51,24 +51,7 @@
         <input type="text" name="recipient_phones" class="form-control"
                 placeholder="+628111111, +628222222">
         </div>
-
-          {{-- Notification Type --}}
-          {{-- <div class="mb-3">
-            <label class="form-label">Notification Type</label><br>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="notification_type" value="email" checked>
-              <label class="form-check-label">Email</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="notification_type" value="whatsapp">
-              <label class="form-check-label">WhatsApp</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="notification_type" value="both">
-              <label class="form-check-label">Both</label>
-            </div>
-          </div> --}}
-        </div>
+    </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

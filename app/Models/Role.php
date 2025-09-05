@@ -4,17 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Role extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'slug',
-        'need_approval',
-        'description'
+        'name',       // nama role (Admin, User, dll)
+        'level',      // angka 1/2/3
+        'description' // keterangan
     ];
 
     public function users()
