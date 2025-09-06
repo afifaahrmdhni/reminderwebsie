@@ -24,7 +24,7 @@
       <a href="{{ route('products-admin.index') }}" 
          class="nav-link px-3 py-2 rounded {{ request()->routeIs('products-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
          data-title="Product admin">
-         <i class="fas fa-box me-2"></i> Product
+         <i class="fas fa-box me-2"></i> Kategori Product
       </a>
     </li>
 

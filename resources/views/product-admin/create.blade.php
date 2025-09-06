@@ -11,21 +11,14 @@
         @csrf
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label">Nama Kategori</label>
-            <input type="text" name="name" class="form-control" placeholder="Misalnya: Domain Hosting" required>
+            <label class="form-label">Kategori barang</label>
+            <input type="text" name="name" class="form-control" placeholder="Contoh: Software" required>
           </div>
-
-          <div class="mb-3">
-            <label class="form-label">Icon (opsional)</label>
-            <input type="text" name="icon" class="form-control" placeholder="fa-solid fa-bell">
-          </div>
-        </div>
-
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
           <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
       </form>
-    </div>
+    </div> 
   </div>
 </div>
