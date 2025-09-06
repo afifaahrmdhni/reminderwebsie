@@ -10,10 +10,9 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         DB::table('roles')->insert([
-            ['name' => 'Admin', 'description' => 'Full access to system'],
-            ['name' => 'Level 1', 'description' => 'Tambah/Edit/Hapus reminder'],
-            ['name' => 'Level 2', 'description' => 'Tambah reminder saja'],
-            ['name' => 'Level 3', 'description' => 'Hanya bisa lihat reminder'],
+            ['id' => 1, 'name' => 'Super User'],
+            ['id' => 2, 'name' => 'Normal User'],
+            ['id' => 3, 'name' => 'Mid User'],
         ]);
     }
 }

@@ -60,7 +60,7 @@
       <h2 class="h2" style="padding-left: 15px;">Active Reminder</h2>
       <span class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#createReminderModal">
         <i class="fa-solid fa-plus" style="margin-right:  2px"></i>
-        Add Reminder</span>
+        Tambah Reminder</span>
 
         {{-- include modal --}}
         @include('reminders-admin.create')

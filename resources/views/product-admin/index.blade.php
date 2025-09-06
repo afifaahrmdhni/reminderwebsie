@@ -11,7 +11,7 @@
                     <h3 class="text-lg font-semibold text-gray-800">Kategori/Product Terbaru</h3>
                     <span class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#categoryModal">
                     <i class="fa-solid fa-plus" style="margin-right:  2px"></i>
-                    Add Product/Kategori</span>
+                    Tambah Produk/Kategori</span>
                     </div>
 
                     {{-- include modal --}}
@@ -22,7 +22,7 @@
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Nama</th>
-                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Icon / Gambar</th>
+                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Keterangan</th>
                                 <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Jumlah Reminder</th>
                                 <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Action</th>
                             </tr>
@@ -50,7 +50,7 @@
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600">
-                                                Delete
+                                                Hapus
                                             </button>
                                         </form>
                                     </div>
