@@ -22,8 +22,6 @@
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Nama</th>
-                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Icon / Gambar</th>
-                                <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Jumlah Reminder</th>
                                 <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Action</th>
                             </tr>
                         </thead>
@@ -31,27 +29,19 @@
                             @foreach ($datas as $item)
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->name }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $item->icon ?? '-' }}</td>
-
-                                {{-- kalau ada relasi reminders(), hitung jumlahnya --}}
-                                <td class="px-6 py-4 text-sm text-center font-medium text-gray-900">
-                                    {{ $item->reminders_count ?? 0 }}
-                                </td>
 
                                 <td class="px-6 py-4 text-sm text-center">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <a href=""
-                                        class="px-3 py-1 text-sm rounded bg-yellow-500 text-white hover:bg-yellow-600">
-                                            Edit
-                                        </a>
+                                         <button class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors" onclick="editUser(3)">
+                                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                                </button>
                                         <form action="" method="POST"
                                             onsubmit="return confirm('Yakin hapus data ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                    class="px-3 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600">
-                                                Delete
-                                            </button>
+                                                 <button class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors" onclick="deleteUser(3)">
+                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                                </button>
                                         </form>
                                     </div>
                                 </td>
