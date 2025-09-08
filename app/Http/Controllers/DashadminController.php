@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Reminder;
 
 class DashadminController extends Controller
 {
@@ -13,6 +15,8 @@ class DashadminController extends Controller
     {
         return view('dashboard-admin.index', [
             'title' => 'Dashboard',
+            'totalUsers' => User::count(),
+            'totalReminders' => Reminder::count(),
         ]);
     }
 

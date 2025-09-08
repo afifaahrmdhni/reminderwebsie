@@ -9,26 +9,19 @@ use App\Models\ReminderCategory;
 class ReminderController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of reminders.
      */
     public function index()
     {
         return view('reminders-admin.index', [
-            'title'    => 'Reminders admin',
-            'reminders'=> Reminder::latest()->get(),
+            'title'      => 'Reminders Admin',
+            'reminders'  => Reminder::with('category')->latest()->get(),
+            'categories' => ReminderCategory::all(),
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a newly created reminder.
      */
     public function store(Request $request)
     {
@@ -41,14 +34,14 @@ class ReminderController extends Controller
             'recipient_phones' => 'nullable|string',
         ]);
 
-        // minimal salah satu diisi
+        // Wajib minimal 1 kontak diisi
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
             return back()->withErrors([
-                'recipient_emails' => 'Isi minimal satu email atau phone.'
+                'recipient_emails' => 'Isi minimal satu email atau nomor telepon.',
             ]);
         }
 
-        // simpan jadi array JSON
+        // Simpan jadi array JSON (auto ke cast di model jika pakai casts json)
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
             ? array_map('trim', explode(',', $validated['recipient_emails']))
             : null;
@@ -65,34 +58,60 @@ class ReminderController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified reminder.
      */
-    public function show(string $id)
+    public function edit(Reminder $reminder)
     {
-        //
+        return view('reminders-admin.edit', [
+            'reminder'   => $reminder,
+            'categories' => ReminderCategory::all(),
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified reminder.
      */
-    public function edit(string $id)
+    public function update(Request $request, Reminder $reminder)
     {
-        //
+        $validated = $request->validate([
+            'title'            => 'required|string|max:255',
+            'category_id'      => 'required|exists:reminder_categories,id',
+            'due_date'         => 'nullable|date',
+            'description'      => 'nullable|string',
+            'recipient_emails' => 'nullable|string',
+            'recipient_phones' => 'nullable|string',
+        ]);
+
+        if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
+            return back()->withErrors([
+                'recipient_emails' => 'Isi minimal satu email atau nomor telepon.',
+            ]);
+        }
+
+        $validated['recipient_emails'] = !empty($validated['recipient_emails'])
+            ? array_map('trim', explode(',', $validated['recipient_emails']))
+            : null;
+
+        $validated['recipient_phones'] = !empty($validated['recipient_phones'])
+            ? array_map('trim', explode(',', $validated['recipient_phones']))
+            : null;
+
+        $reminder->update($validated);
+
+        return redirect()
+            ->route('reminders-admin.index')
+            ->with('success', 'Reminder berhasil diperbarui!');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified reminder.
      */
-    public function update(Request $request, string $id)
+    public function destroy(Reminder $reminder)
     {
-        //
-    }
+        $reminder->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()
+            ->route('reminders-admin.index')
+            ->with('success', 'Reminder berhasil dihapus!');
     }
 }

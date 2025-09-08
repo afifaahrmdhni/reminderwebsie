@@ -22,9 +22,9 @@
               <label class="form-label">Category</label>
               <select class="form-select" name="category_id" required>
                 <option value="">Select a category</option>
-                <option value="domain">Domain</option>
-                <option value="license">License</option>
-                <option value="server">Server</option>
+                @foreach ($categories as $cat)
+                  <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                @endforeach
               </select>
             </div>
             <div class="col-md-6 mb-3">
