@@ -1,114 +1,80 @@
-@extends ('backend.master')
-@section ('sidebar')
-@include('backend.sidebar')
+@extends('backend.master')
+
+@section('sidebar')
+    @include('backend.sidebar')
 @endsection
 
-@section ('content')
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Tambah User Baru</h3>
-                        </div>
-                        
-                        <div class="p-6">
-                            <form  action ="{{ route('users-admin.store') }}" method="POST" id="user-form" class="space-y-6">
-                                @csrf
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div>
-                                        <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                                        <input type="text" id="nama" name="name" required
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                               placeholder="Masukkan nama lengkap">
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="no-telp" class="block text-sm font-medium text-gray-700 mb-2">No. Whatsapp</label>
-                                        <input type="tel" id="whatsapp" name="phone" required
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                               placeholder="08xxxxxxxxxx">
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                        <input type="email" id="email" name="email" required
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                               placeholder="user@email.com">
-                                    </div>
+@section('content')
+<div class="container">
+    <h2 class="text-2xl font-bold mb-4">Manage Users</h2>
 
-                                    <div> 
-                                         <label for="role_id" class="block text-sm font-medium text-gray-700 mb-2">Role ID</label>
-  <select id="role_id" name="role_id" required
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-    <option value="">Pilih role</option>
-    <option value="1">Super User</option>
-    <option value="2">Normal User</option>
-    <option value="3">Mid User</option>
-  </select>
+    {{-- Form Tambah User --}}
+    <div class="card p-4 mb-4 shadow rounded">
+        <h3 class="text-lg font-semibold mb-3">Add New User</h3>
 
-                                    </div>
+        <form action="{{ route('users-admin.store') }}" method="POST">
+            @csrf
 
-                                     <div>
-                                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                                        <input type="password" id="password" name="password" required
-                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                               placeholder="Masukan password">
-                                    </div>
+            {{-- Name --}}
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
 
-                                    
-                                </div>
-                                
-                                <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                                        <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i>
-                                        Tambah User
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            {{-- Email --}}
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
 
-            {{-- list users --}}
- <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800">Daftar User Terdaftar</h3>
-                        </div>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Telepon</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>              
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
-                                    @foreach($users as $user)
-                                    <tr>
-                                        <td class="px-6 py-4 text-left">{{ $user->name }}</td>
-                                        <td class="px-6 py-4 text-left">{{ $user->phone }}</td>
-                                        <td class="px-6 py-4 text-left">{{ $user->email }}</td>
-                                        <td class="px-6 py-4 text-left">{{ $user->role->name }}</td>
-                                        
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div class="flex space-x-2">
-                                                <button class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors" onclick="editUser(3)">
-                                                    <i data-lucide="edit" class="w-4 h-4"></i>
-                                                </button>
-                                                <button class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors" onclick="deleteUser(3)">
-                                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+            {{-- Password --}}
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            {{-- Role --}}
+            <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role_id" name="role_id" required>
+                    <option value="" disabled selected>-- Select Role --</option>
+                    <option value="1">Super User</option>
+                    <option value="2">Multi User</option>
+                    <option value="3">Basic User</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </form>
     </div>
 
+    {{-- Table daftar user --}}
+    <div class="card p-4 shadow rounded">
+        <h3 class="text-lg font-semibold mb-3">User List</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($users as $user)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->role_name }}</td> {{-- sudah auto-convert pakai accessor --}}
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No users found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

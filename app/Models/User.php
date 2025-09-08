@@ -10,17 +10,29 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    /**
+     * Kolom yang bisa diisi mass-assignment
+     */
     protected $fillable = [
         'name',
         'email',
-        'phone',        // nomor telepon
+        'phone',     // nomor telepon
         'password',
-        'role_id',      // level 1–3
-        'is_active'     // aktif / nonaktif
+        'role_id',   // relasi ke tabel roles
+        'is_active', // status aktif / nonaktif
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    /**
+     * Kolom yang disembunyikan saat serialisasi
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
+    /**
+     * Casting kolom ke tipe data tertentu
+     */
     protected function casts(): array
     {
         return [
@@ -30,24 +42,48 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Relasi: User belongsTo Role
+     */
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Relasi: User hasMany Reminder
+     */
     public function reminders()
     {
         return $this->hasMany(Reminder::class);
     }
 
+    /**
+     * Relasi: User hasMany ReminderLog
+     */
     public function logs()
     {
         return $this->hasMany(ReminderLog::class, 'performed_by');
     }
 
-    // Scope cepat ambil user aktif
+    /**
+     * Scope: Ambil user yang aktif saja
+     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Accessor: Konversi role_id ke nama role
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return match ($this->role_id) {
+            1       => 'Super User',
+            2       => 'Multi User',
+            3       => 'Basic User',
+            default => 'Unknown',
+        };
     }
 }

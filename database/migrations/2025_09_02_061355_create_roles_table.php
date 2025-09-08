@@ -9,10 +9,7 @@ return new class extends Migration {
         // Buat tabel roles
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');               // contoh: Admin, Staff, Viewer
-            $table->unsignedTinyInteger('level'); // 1,2,3
-            $table->text('description')->nullable();
-            $table->timestamps();
+            $table->string('name'); // Super User, Multi User, Basic User
         });
 
         // Tambah foreign key di users -> roles

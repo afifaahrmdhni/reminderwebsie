@@ -13,9 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->get();
-        $users = User::all();
-        return view('users-admin.index', compact('users'));
+        $users = User::with('role')->get(); // ambil user beserta role
+        $roles = \App\Models\Role::all();   // ambil semua role
+
+        return view('users-admin.index', compact('users', 'roles'));
     }
 
     /**
@@ -42,13 +43,13 @@ class UserController extends Controller
         'is_active' => 'nullable|boolean',
     ]);
 
-    User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'phone' => $request->phone,
+        User::create([
+        'name'     => $request->name,
+        'email'    => $request->email,
+        'phone'    => $request->phone,
         'password' => Hash::make($request->password),
-        'role_id' => $request->role_id,
-        'is_active' => $request->is_active ?? true,
+        'role_id'  => $request->role_id,  // <-- penting
+        'is_active'=> $request->is_active ?? true,
     ]);
 
     return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
