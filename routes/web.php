@@ -5,6 +5,8 @@ use App\Http\Controllers\DashadminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', [DashadminController::class, 'index'])->name('dashboard-admin.index');
 
@@ -16,3 +18,10 @@ Route::prefix('archive-admin')->name('archive-admin.')->group(function () {
     Route::post('/{id}/restore', [ArchiveController::class, 'restore'])->name('restore');
     Route::delete('/{id}/force-delete', [ArchiveController::class, 'forceDelete'])->name('forceDelete');
 });
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+// });

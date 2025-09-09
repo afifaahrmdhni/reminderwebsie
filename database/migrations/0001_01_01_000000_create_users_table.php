@@ -10,9 +10,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone')->nullable();         // nomor telepon user
+            $table->string('phone')->nullable();         
+            $table->string('photo')->nullable();   // foto profil user
             $table->string('password');
-            $table->foreignId('role_id')->nullable();    // kolomnya aja, FK dibuat di migration roles
+            $table->foreignId('role_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();

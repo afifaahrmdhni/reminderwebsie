@@ -15,15 +15,15 @@
     <li class="nav-item">
       <a href="{{ route('users-admin.index') }}" 
          class="nav-link px-3 py-2 rounded {{ request()->routeIs('users-admin*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
-         data-title="Users-admin">
+         data-title="users-admin">
          <i class="fas fa-users me-2"></i> Users
       </a>
     </li>
 
     <li class="nav-item">
       <a href="{{ route('product-admin.index') }}" 
-         class="nav-link px-3 py-2 rounded {{ request()->routeIs('products-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
-         data-title="Product admin">
+         class="nav-link px-3 py-2 rounded {{ request()->routeIs('product-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
+         data-title="product-admin">
          <i class="fas fa-box me-2"></i> Kategori Product
       </a>
     </li>
@@ -31,7 +31,7 @@
     <li class="nav-item">
       <a href="{{ route('reminders-admin.index') }}" 
          class="nav-link px-3 py-2 rounded {{ request()->routeIs('reminders-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
-         data-title="Reminders admin">
+         data-title="reminders-admin">
          <i class="fas fa-bell me-2"></i> Reminders
       </a>
     </li>
@@ -39,7 +39,7 @@
     <li class="nav-item">
       <a href="{{ route('archive-admin.index') }}" 
          class="nav-link px-3 py-2 rounded {{ request()->routeIs('archive-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}"
-         data-title="Archive admin">
+         data-title="archive-admin">
          <i class="fas fa-archive me-2"></i> Archive
       </a>
     </li>
