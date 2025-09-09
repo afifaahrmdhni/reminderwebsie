@@ -27,6 +27,12 @@
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
 
+             {{-- Email --}}
+            <div class="mb-3">
+                <label for="whatsapp" class="form-label">Nomor Whatsaap</label>
+                <input type="text" class="form-control" id="whatsapp" name="phone" required>
+            </div>
+
             {{-- Password --}}
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
