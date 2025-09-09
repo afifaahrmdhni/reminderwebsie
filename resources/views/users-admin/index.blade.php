@@ -27,7 +27,7 @@
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
 
-             {{-- Nomor Whatsapp --}}
+            {{-- Nomor Whatsapp --}}
             <div class="mb-3">
                 <label for="phone" class="form-label">Nomor Whatsaap</label>
                 <input type="number" class="form-control" id="phone" name="phone" required>
@@ -57,50 +57,115 @@
     {{-- Table daftar user --}}
     <div class="card p-4 shadow rounded">
         <h3 class="text-lg font-semibold mb-3">User List</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Nomor</th>
-                    <th>Action</th>
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-light">
+                <tr class="text-center">
+                    <th style="width: 50px;">#</th>
+                    <th style="width: 180px;">Name</th>
+                    <th style="width: 200px;">Email</th>
+                    <th style="width: 150px;">Role</th>
+                    <th style="width: 150px;">Nomor</th>
+                    <th style="width: 120px;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($users as $user)
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->role_name }}</td> {{-- sudah auto-convert pakai accessor --}}
+                        <td>{{ $user->role_name }}</td>
                         <td>{{ $user->phone }}</td>
-                        <td class="px-6 py-4 text-sm text-center">
-                            <div class="flex items-center justify-center space-x-2">
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+
                                 {{-- Tombol Edit --}}
-                                <a href=""
-                                class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editUserModal{{ $user->id }}">
                                     <i data-lucide="edit" class="w-4 h-4"></i>
-                                </a>
+                                </button>
 
                                 {{-- Tombol Delete --}}
-                                <form action=""
-                                    method="POST"
-                                    onsubmit="return confirm('Yakin hapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteUserModal{{ $user->id }}">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
+
+                    {{-- Modal Edit --}}
+                    <div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form action="{{ route('users-admin.update', $user->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" name="name" value="{{ $user->name }}" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" value="{{ $user->email }}" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Nomor WhatsApp</label>
+                                            <input type="number" name="phone" value="{{ $user->phone }}" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            <select name="role_id" class="form-select" required>
+                                                <option value="1" {{ $user->role_id == 1 ? 'selected' : '' }}>Super User</option>
+                                                <option value="2" {{ $user->role_id == 2 ? 'selected' : '' }}>Multi User</option>
+                                                <option value="3" {{ $user->role_id == 3 ? 'selected' : '' }}>Basic User</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Modal Delete --}}
+                    <div class="modal fade" id="deleteUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form action="{{ route('users-admin.destroy', $user->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Confirm Delete</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Yakin ingin menghapus user <strong>{{ $user->name }}</strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">No users found.</td>
+                        <td colspan="6" class="text-center">No users found.</td>
                     </tr>
                 @endforelse
             </tbody>

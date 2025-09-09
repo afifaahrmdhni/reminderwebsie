@@ -4,14 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ReminderCategory;
-use App\Models\User;
-use App\Models\ReminderLog;
-use App\Models\Notification;
+use Illuminate\Database\Eloquent\SoftDeletes; // ⬅️ tambahin
 
 class Reminder extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes; // ⬅️ aktifin soft delete
 
     protected $fillable = [
         'title',
