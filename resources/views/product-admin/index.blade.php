@@ -14,7 +14,7 @@
             </button>
         </div>
 
-        {{-- include modal create --}}
+        {{-- Modal Create --}}
         @include('product-admin.create')
     </div>
 
@@ -41,7 +41,7 @@
                         {{ $item->deskripsi ?? '-' }}
                     </td>
 
-                    {{-- Jumlah Reminder (misal relasi reminders) --}}
+                    {{-- Jumlah Reminder --}}
                     <td class="px-6 py-4 text-sm text-center">
                         {{ $item->reminders->count() ?? 0 }}
                     </td>
@@ -50,25 +50,28 @@
                     <td class="px-6 py-4 text-sm text-center">
                         <div class="flex items-center justify-center space-x-2">
                             {{-- Tombol Edit --}}
-                            <a href=""
-                               class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors">
-                                <i data-lucide="edit" class="w-4 h-4"></i>
-                            </a>
+                            <button type="button"
+                                class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editCategoryModal{{ $item->id }}">
+                                Edit
+                            </button>
 
-                            {{-- Tombol Delete --}}
-                            <form action=""
-                                  method="POST"
-                                  onsubmit="return confirm('Yakin hapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                        class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
-                            </form>
+                            {{-- Tombol Delete (pakai modal konfirmasi) --}}
+                            <button type="button"
+                                class="btn btn-danger btn-sm"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#confirmDeleteModal"
+                                onclick="setDeleteAction('{{ route('product-admin.destroy', $item->id) }}')">
+                                Hapus
+                            </button>
                         </div>
                     </td>
                 </tr>
+
+                {{-- Modal Edit --}}
+                @include('product-admin.edit', ['item' => $item])
+
                 @empty
                 <tr>
                     <td colspan="4" class="px-6 py-4 text-center text-gray-500">
@@ -80,4 +83,34 @@
         </table>
     </div>
 </div>
+
+{{-- Modal Konfirmasi Delete (hanya sekali) --}}
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Konfirmasi Hapus</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Apakah kamu yakin ingin menghapus kategori ini?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <form id="deleteForm" method="POST">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- Script kecil --}}
+<script>
+function setDeleteAction(url) {
+    document.getElementById('deleteForm').action = url;
+}
+</script>
 @endsection

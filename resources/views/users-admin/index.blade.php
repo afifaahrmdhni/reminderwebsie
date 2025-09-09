@@ -27,10 +27,10 @@
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
 
-             {{-- Email --}}
+             {{-- Nomor Whatsapp --}}
             <div class="mb-3">
-                <label for="whatsapp" class="form-label">Nomor Whatsaap</label>
-                <input type="text" class="form-control" id="whatsapp" name="phone" required>
+                <label for="phone" class="form-label">Nomor Whatsaap</label>
+                <input type="number" class="form-control" id="phone" name="phone" required>
             </div>
 
             {{-- Password --}}
@@ -64,6 +64,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Nomor</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -74,6 +75,7 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role_name }}</td> {{-- sudah auto-convert pakai accessor --}}
+                        <td>{{ $user->phone }}</td>
                         <td class="px-6 py-4 text-sm text-center">
                             <div class="flex items-center justify-center space-x-2">
                                 {{-- Tombol Edit --}}

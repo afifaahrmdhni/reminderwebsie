@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reminder;
 use Illuminate\Http\Request;
 use App\Models\ReminderCategory;
 
@@ -33,7 +34,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'icon' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string|max:255',
         ]);
 
         ReminderCategory::create($validated);
@@ -60,16 +61,27 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'deskripsi' => 'required|max:255',
+        ]);
+
+        $item = ReminderCategory::findOrFail($id);
+        $item->update([
+            'name' => $request->name,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        return redirect()->back()->with('success', 'Kategori berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $item = ReminderCategory::findOrFail($id);
+        $item->delete();
+
+        return redirect()->back()->with('success', 'Kategori berhasil dihapus!');
     }
 }

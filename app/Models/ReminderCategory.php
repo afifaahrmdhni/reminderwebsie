@@ -8,7 +8,7 @@ use App\Models\Reminder;
 
 class ReminderCategory extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'deskripsi'];
 
     public function reminders()
     {

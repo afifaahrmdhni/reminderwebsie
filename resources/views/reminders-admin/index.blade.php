@@ -11,7 +11,6 @@
 @section ('content')
 
 <style>
-  /* Card Styling */
   .reminder-card {
     padding:16px;
     border:1px solid #e5e7eb;
@@ -43,13 +42,6 @@
   }
   .modal-footer {
     border-top: none;
-  }
-  .badge-condition {
-    background:#ffd712;
-    color:#000000;
-    font-weight:600;
-    padding:3px 10px;
-    border-radius:6px;
   }
 </style>
 
@@ -88,7 +80,25 @@
             {{ $reminder->description ?? '-' }}
           </p>
           <div class="d-flex align-items-center justify-content-between mt-2">
-            <span class="badge-condition">Active</span>
+            {{-- Badge dinamis --}}
+            @php
+              $today = \Carbon\Carbon::today();
+              $due   = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
+              $daysLeft = $due ? $today->diffInDays($due, false) : null;
+            @endphp
+
+            @if (is_null($due))
+              <span class="badge bg-secondary">No Due Date</span>
+            @elseif ($daysLeft > 14)
+              <span class="badge bg-success">Active</span>
+            @elseif ($daysLeft > 7)
+              <span class="badge bg-warning text-dark">Expiring Soon</span>
+            @elseif ($daysLeft >= 0)
+              <span class="badge bg-danger">Critical</span>
+            @else
+              <span class="badge bg-dark">Expired</span>
+            @endif
+
             <div style="font-size:18px; color:#2563eb;">✉️ 💬</div>
           </div>
         </div>
@@ -117,21 +127,43 @@
               <p>{{ $reminder->description ?? 'No description' }}</p>
               <p><b>Emails:</b> {{ $reminder->recipient_emails ? implode(', ', $reminder->recipient_emails) : '-' }}</p>
               <p><b>Phones:</b> {{ $reminder->recipient_phones ? implode(', ', $reminder->recipient_phones) : '-' }}</p>
-              <span class="badge bg-success">Active</span>
+
+              {{-- Badge dinamis di modal --}}
+              @php
+                $today = \Carbon\Carbon::today();
+                $due   = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
+                $daysLeft = $due ? $today->diffInDays($due, false) : null;
+              @endphp
+
+              @if (is_null($due))
+                <span class="badge bg-secondary">No Due Date</span>
+              @elseif ($daysLeft > 14)
+                <span class="badge bg-success">Active</span>
+              @elseif ($daysLeft > 7)
+                <span class="badge bg-warning text-dark">Expiring Soon</span>
+              @elseif ($daysLeft >= 0)
+                <span class="badge bg-danger">Critical</span>
+              @else
+                <span class="badge bg-dark">Expired</span>
+              @endif
             </div>
             <div class="modal-footer justify-content-between">
               <div>
-                {{-- {{ route('reminders-admin.edit', $reminder->id) }} --}}
-                <a href="" class="btn btn-sm btn-outline-primary">
-                  ✏️ Edit
-                </a>
-                <form action=""
+                {{-- Tombol Edit --}}
+                <button type="button" class="btn btn-sm btn-warning text-white"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editReminderModal{{ $reminder->id }}">
+                  Edit
+                </button>
+
+                {{-- Tombol Delete --}}
+                <form action="{{ route('reminders-admin.destroy', $reminder->id) }}"
                       method="POST" class="d-inline"
                       onsubmit="return confirm('Yakin hapus reminder ini?')">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-outline-danger">
-                    🗑️ Delete
+                  <button type="submit" class="btn btn-sm btn-danger">
+                    Delete
                   </button>
                 </form>
               </div>
@@ -139,6 +171,10 @@
           </div>
         </div>
       </div>
+
+      {{-- Modal Edit --}}
+      @include('reminders-admin.edit', ['reminder' => $reminder, 'categories' => $categories])
+
     @empty
       <p class="text-center text-muted py-4">Belum ada reminder.</p>
     @endforelse
