@@ -40,17 +40,12 @@
           </div>
 
           {{-- Recipient Email(s) --}}
-        <div class="mb-3">
-        <label class="form-label">Recipient Email(s)</label>
-        <input type="text" name="recipient_emails" class="form-control"
-                placeholder="email1@domain.com, email2@domain.com">
-        </div>
-
-        <div class="mb-3">
-        <label class="form-label">Recipient Phone(s)</label>
-        <input type="text" name="recipient_phones" class="form-control"
-                placeholder="+628111111, +628222222">
-        </div>
+          <label for="recipientEmail">Recipient Email(s)</label>
+<input type="text" id="recipientEmail" class="form-control" autocomplete="off">
+<div id="emailList" class="dropdown-menu" style="display:block; position:absolute; display:none"></div>
+{{-- Recipient phone --}}
+<label for="recipientPhone">Recipient Phone(s)</label>
+<input type="text" id="recipientPhone" class="form-control">
     </div>
 
         <div class="modal-footer">

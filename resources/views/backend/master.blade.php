@@ -36,6 +36,13 @@
       color: #2563eb !important;
       font-weight: 600;
     }
+
+    #emailList {
+    display: none; /* default tersembunyi */
+    position: absolute;
+    width: 90%; /* biar pas sama input */
+    z-index: 1000; /* supaya di atas elemen lain */
+  }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -128,6 +135,45 @@ toggle.addEventListener('click', () => {
   input.type = input.type === 'password' ? 'text' : 'password';
 });
   </script>
+
+<script>
+document.getElementById('recipientEmail').addEventListener('keyup', function() {
+    let query = this.value;
+    let dropdown = document.getElementById('emailList');
+
+    if (query.length > 2) { // minimal 3 huruf baru cari
+        fetch(`/search-user?q=${query}`)
+            .then(response => response.json())  
+            .then(data => {
+                dropdown.innerHTML = "";
+
+                if (data.length > 0) {
+                    dropdown.style.display = "block"; // tampilkan kalau ada hasil
+                    data.forEach(user => {
+                        let option = document.createElement("div");
+                        option.classList.add("dropdown-item");
+                        option.style.cursor = "pointer";
+                        option.innerText = user.email;
+                        option.onclick = function() {
+                            document.getElementById('recipientEmail').value = user.email;
+                            document.getElementById('recipientPhone').value = user.phone;
+                            dropdown.innerHTML = "";
+                            dropdown.style.display = "none"; // sembunyikan setelah pilih
+                        };
+                        dropdown.appendChild(option);
+                    });
+                } else {
+                    dropdown.style.display = "none"; // sembunyikan kalau kosong
+                }
+            });
+    } else {
+        dropdown.innerHTML = "";
+        dropdown.style.display = "none"; // sembunyikan kalau <3 huruf
+    }
+});
+
+</script>
+
 
   <script src="{{ asset('front-end/js/bootstrap.bundle.min.js') }}"></script>
 </body>

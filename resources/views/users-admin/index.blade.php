@@ -29,8 +29,8 @@
 
              {{-- Nomor Whatsapp --}}
             <div class="mb-3">
-                <label for="phone" class="form-label">Nomor Whatsaap</label>
-                <input type="number" class="form-control" id="phone" name="phone" required>
+                <label for="whatsapp" class="form-label">Nomor Whatsaap</label>
+                <input type="text" class="form-control" id="whatsapp" name="phone" required>
             </div>
 
             {{-- Password --}}

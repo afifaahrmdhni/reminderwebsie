@@ -94,6 +94,12 @@ class ReminderController extends Controller
         ]);
     }
 
+
+    public function createMessageForm() {
+    $users = User::select('email', 'phone')->get();
+    return view('reminder-admin.create', compact('reminders'));
+}
+
     /**
      * Update the specified reminder.
      */

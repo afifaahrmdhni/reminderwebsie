@@ -56,6 +56,19 @@ class UserController extends Controller
 
     }
 
+
+    public function searchUser(Request $request)
+{
+    $query = $request->get('q');
+
+    $users = User::where('email', 'LIKE', "%{$query}%")
+                 ->select('email', 'phone')
+                 ->get();
+
+    return response()->json($users);
+}
+
+
     /**
      * Display the specified resource.
      */
