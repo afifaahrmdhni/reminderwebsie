@@ -51,24 +51,25 @@
   {{-- HEADER --}}
   <div class="d-flex align-items-center justify-content-between mb-4 px-3"
        style="background-color: #e5e7eb; border-radius: 12px; padding:12px 16px;">
-    <h2 class="h2 mb-0">Active Reminders</h2>
+    <h3 class="h3 mb-0">Active Reminders</h3>
 
     <div class="d-flex align-items-center gap-2">
       {{-- Dropdown Filter --}}
-      <select class="form-select form-select-sm" id="filterSelect" style="width: 140px; height:38px;">
-        <option value="all" selected>All</option>
-        <option value="active">Active</option>
-        <option value="upcoming">Upcoming</option>
-        <option value="urgent">Urgent</option>
-        <option value="expired">Expired</option>
-      </select>
+      <form method="GET" action="{{ route('reminders-admin.index') }}" class="d-flex align-items-center gap-2">
+        <select class="form-select form-select-sm" name="status" onchange="this.form.submit()" style="width: 140px; height:38px;">
+            <option value="all" {{ $status == 'all' ? 'selected' : '' }}>All</option>
+            <option value="active" {{ $status == 'active' ? 'selected' : '' }}>Active</option>
+            <option value="upcoming" {{ $status == 'upcoming' ? 'selected' : '' }}>Upcoming</option>
+            <option value="urgent" {{ $status == 'urgent' ? 'selected' : '' }}>Urgent</option>
+            <option value="expired" {{ $status == 'expired' ? 'selected' : '' }}>Expired</option>
+        </select>
+              </form>
 
-      {{-- Tombol Tambah --}}
-      <button class="btn btn-primary d-flex align-items-center"
-              data-bs-toggle="modal" data-bs-target="#createReminderModal">
-        <i class="fa-solid fa-plus me-1"></i>
-        Tambah Reminder
-      </button>
+        <button class="btn btn-primary d-flex align-items-center"
+                data-bs-toggle="modal" data-bs-target="#createReminderModal">
+          <i class="fa-solid fa-plus me-1"></i> Tambah Reminder
+        </button>
+
     </div>
   </div>
 
@@ -231,24 +232,5 @@
     @endforelse
   </div>
 </div>
-
-{{-- FILTERING SCRIPT --}}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const filterSelect = document.getElementById('filterSelect');
-  const items = document.querySelectorAll('.reminder-item');
-
-  function applyFilter() {
-    const selected = filterSelect.value.toLowerCase().trim();
-    items.forEach(item => {
-      const status = (item.dataset.status || '').toLowerCase().trim();
-      item.style.display = (selected === 'all' || status === selected) ? 'flex' : 'none';
-    });
-  }
-
-  filterSelect.addEventListener('change', applyFilter);
-  applyFilter(); // jalan saat pertama load
-});
-</script>
 
 @endsection

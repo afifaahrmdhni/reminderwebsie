@@ -11,12 +11,38 @@ class ReminderController extends Controller
     /**
      * Display a listing of reminders.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $status = $request->get('status', 'all'); // default "all"
+        $today  = \Carbon\Carbon::today();
+
+        $reminders = Reminder::with('category')
+            ->latest()
+            ->get()
+            ->filter(function($reminder) use ($status, $today) {
+                $due = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
+                $daysLeft = $due ? $today->diffInDays($due, false) : null;
+
+                if (is_null($due)) {
+                    $reminderStatus = 'nodate';
+                } elseif ($daysLeft > 14) {
+                    $reminderStatus = 'active';
+                } elseif ($daysLeft > 7) {
+                    $reminderStatus = 'upcoming';
+                } elseif ($daysLeft >= 0) {
+                    $reminderStatus = 'urgent';
+                } else {
+                    $reminderStatus = 'expired';
+                }
+
+                return $status === 'all' || $status === $reminderStatus;
+            });
+
         return view('reminders-admin.index', [
             'title'      => 'Reminders Admin',
-            'reminders'  => Reminder::with('category')->latest()->get(),
+            'reminders'  => $reminders,
             'categories' => ReminderCategory::all(),
+            'status'     => $status, // biar bisa tahu dropdown mana yang kepilih
         ]);
     }
 
