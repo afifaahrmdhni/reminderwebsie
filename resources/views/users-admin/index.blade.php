@@ -64,6 +64,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +74,27 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->role_name }}</td> {{-- sudah auto-convert pakai accessor --}}
+                        <td class="px-6 py-4 text-sm text-center">
+                            <div class="flex items-center justify-center space-x-2">
+                                {{-- Tombol Edit --}}
+                                <a href=""
+                                class="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </a>
+
+                                {{-- Tombol Delete --}}
+                                <form action=""
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin hapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>
