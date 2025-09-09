@@ -17,6 +17,7 @@ class DashadminController extends Controller
             'title' => 'Dashboard',
             'totalUsers' => User::count(),
             'totalReminders' => Reminder::count(),
+            'duesoonReminders' => Reminder::where('due_date', '>=', now())->where('due_date', '<=', now()->addDays(7))->count(),
         ]);
     }
 

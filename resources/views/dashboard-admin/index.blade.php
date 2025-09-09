@@ -43,7 +43,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-600">Mendekati Jatuh Tempo</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">24</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ $duesoonReminders }}</p>
                         </div>
                         <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                             <i class="fas fa-clock text-red-500 text-xl"></i>

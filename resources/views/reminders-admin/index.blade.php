@@ -20,6 +20,7 @@
     transition: all 0.25s ease-in-out;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     margin-bottom: 20px;
+    min-height: 200px;
   }
   .reminder-card:hover {
     transform: translateY(-3px);
@@ -46,22 +47,60 @@
 </style>
 
 <div class="container" style="padding-top: 16px;">
-  <div class="row g-3" style="background-color: #e5e7eb; border-radius: 12px;">
 
-    <div class="d-flex justify-content-between align-items-center">
-      <h2 class="h2" style="padding-left: 15px;">Active Reminders</h2>
-      <span class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#createReminderModal">
-        <i class="fa-solid fa-plus" style="margin-right:2px"></i>
+  {{-- HEADER --}}
+  <div class="d-flex align-items-center justify-content-between mb-4 px-3"
+       style="background-color: #e5e7eb; border-radius: 12px; padding:12px 16px;">
+    <h2 class="h2 mb-0">Active Reminders</h2>
+
+    <div class="d-flex align-items-center gap-2">
+      {{-- Dropdown Filter --}}
+      <select class="form-select form-select-sm" id="filterSelect" style="width: 140px; height:38px;">
+        <option value="all" selected>All</option>
+        <option value="active">Active</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="urgent">Urgent</option>
+        <option value="expired">Expired</option>
+      </select>
+
+      {{-- Tombol Tambah --}}
+      <button class="btn btn-primary d-flex align-items-center"
+              data-bs-toggle="modal" data-bs-target="#createReminderModal">
+        <i class="fa-solid fa-plus me-1"></i>
         Tambah Reminder
-      </span>
-      {{-- include modal create --}}
-      @include('reminders-admin.create')
+      </button>
     </div>
+  </div>
 
-    {{-- Looping Reminders --}}
+  @include('reminders-admin.create')
+
+  {{-- LIST REMINDERS --}}
+  <div class="row g-3" id="reminderContainer">
     @forelse ($reminders as $reminder)
-      <div class="col-12 col-sm-6 col-lg-3">
-        <div class="reminder-card" data-bs-toggle="modal" data-bs-target="#reminderModal{{ $reminder->id }}">
+      @php
+        $today = \Carbon\Carbon::today();
+        $due   = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
+        $daysLeft = $due ? $today->diffInDays($due, false) : null;
+
+        if (is_null($due)) {
+            $status = 'nodate';
+        } elseif ($daysLeft > 14) {
+            $status = 'active';
+        } elseif ($daysLeft > 7) {
+            $status = 'upcoming';
+        } elseif ($daysLeft >= 0) {
+            $status = 'urgent';
+        } else {
+            $status = 'expired';
+        }
+      @endphp
+
+      {{-- ✅ reminder-item + data-status --}}
+      <div class="col-12 col-sm-6 col-lg-3 d-flex reminder-item" data-status="{{ $status }}">
+        <div class="reminder-card d-flex flex-column w-100"
+             data-bs-toggle="modal" data-bs-target="#reminderModal{{ $reminder->id }}">
+
+          {{-- HEADER --}}
           <div class="d-flex align-items-center gap-3 mb-2">
             <div style="font-size:28px;">📌</div>
             <div>
@@ -73,33 +112,30 @@
               </div>
             </div>
           </div>
-          <div style="font-size:14px; color:#374151;">
-            📅 {{ $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date)->format('M d, Y') : '-' }}
+
+          {{-- BODY --}}
+          <div class="flex-grow-1">
+            <div style="font-size:14px; color:#374151;">
+              📅 {{ $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date)->format('M d, Y') : '-' }}
+            </div>
+            <p style="font-size:14px; color:#374151; display:-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word;">
+              {{ $reminder->description ?? '-' }}
+            </p>
           </div>
-          <p style="font-size:14px; color:#4b5563; margin-top:6px;">
-            {{ $reminder->description ?? '-' }}
-          </p>
-          <div class="d-flex align-items-center justify-content-between mt-2">
-            {{-- Badge dinamis --}}
-            @php
-              $today = \Carbon\Carbon::today();
-              $due   = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
-              $daysLeft = $due ? $today->diffInDays($due, false) : null;
-            @endphp
 
+          {{-- FOOTER --}}
+          <div class="d-flex align-items-center justify-content-end mb-2">
             @if (is_null($due))
-              <span class="badge bg-secondary">No Due Date</span>
+              <span class="badge bg-secondary fs-6">No Due Date</span>
             @elseif ($daysLeft > 14)
-              <span class="badge bg-success">Active</span>
+              <span class="badge bg-success fs-6">Active</span>
             @elseif ($daysLeft > 7)
-              <span class="badge bg-warning text-dark">Expiring Soon</span>
+              <span class="badge bg-warning text-dark fs-6">Upcoming</span>
             @elseif ($daysLeft >= 0)
-              <span class="badge bg-danger">Critical</span>
+              <span class="badge bg-danger fs-6">Urgent</span>
             @else
-              <span class="badge bg-dark">Expired</span>
+              <span class="badge bg-dark fs-6">Expired</span>
             @endif
-
-            <div style="font-size:18px; color:#2563eb;">✉️ 💬</div>
           </div>
         </div>
       </div>
@@ -124,28 +160,11 @@
               <p><b>Expires:</b>
                 {{ $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date)->format('F d, Y') : '-' }}
               </p>
-              <p>{{ $reminder->description ?? 'No description' }}</p>
+              <p style="font-size:15px; color:#111827; white-space:normal; word-wrap:break-word;">
+                <b>Description:</b> {{ $reminder->description ?? 'No description' }}
+              </p>
               <p><b>Emails:</b> {{ $reminder->recipient_emails ? implode(', ', $reminder->recipient_emails) : '-' }}</p>
               <p><b>Phones:</b> {{ $reminder->recipient_phones ? implode(', ', $reminder->recipient_phones) : '-' }}</p>
-
-              {{-- Badge dinamis di modal --}}
-              @php
-                $today = \Carbon\Carbon::today();
-                $due   = $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date) : null;
-                $daysLeft = $due ? $today->diffInDays($due, false) : null;
-              @endphp
-
-              @if (is_null($due))
-                <span class="badge bg-secondary">No Due Date</span>
-              @elseif ($daysLeft > 14)
-                <span class="badge bg-success">Active</span>
-              @elseif ($daysLeft > 7)
-                <span class="badge bg-warning text-dark">Expiring Soon</span>
-              @elseif ($daysLeft >= 0)
-                <span class="badge bg-danger">Critical</span>
-              @else
-                <span class="badge bg-dark">Expired</span>
-              @endif
             </div>
             <div class="modal-footer justify-content-between">
               <div>
@@ -156,16 +175,25 @@
                   Edit
                 </button>
 
-                {{-- Tombol Delete --}}
-                <form action="{{ route('reminders-admin.destroy', $reminder->id) }}"
-                      method="POST" class="d-inline"
-                      onsubmit="return confirm('Yakin hapus reminder ini?')">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-danger">
-                    Delete
-                  </button>
-                </form>
+                {{-- Tombol Delete (modal confirm sendiri, bukan browser confirm) --}}
+                <button type="button" class="btn btn-sm btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteReminderModal{{ $reminder->id }}">
+                  Delete
+                </button>
+              </div>
+              <div class="d-flex justify-content-end">
+                @if (is_null($due))
+                  <span class="badge bg-secondary fs-6">No Due Date</span>
+                @elseif ($daysLeft > 14)
+                  <span class="badge bg-success fs-6">Active</span>
+                @elseif ($daysLeft > 7)
+                  <span class="badge bg-warning text-dark fs-6">Upcoming</span>
+                @elseif ($daysLeft >= 0)
+                  <span class="badge bg-danger fs-6">Urgent</span>
+                @else
+                  <span class="badge bg-dark fs-6">Expired</span>
+                @endif
               </div>
             </div>
           </div>
@@ -175,11 +203,52 @@
       {{-- Modal Edit --}}
       @include('reminders-admin.edit', ['reminder' => $reminder, 'categories' => $categories])
 
+      {{-- Modal Delete --}}
+      <div class="modal fade" id="deleteReminderModal{{ $reminder->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">Confirm Delete</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              Yakin mau hapus reminder <b>{{ $reminder->title }}</b>?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <form action="{{ route('reminders-admin.destroy', $reminder->id) }}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
     @empty
       <p class="text-center text-muted py-4">Belum ada reminder.</p>
     @endforelse
-
   </div>
 </div>
+
+{{-- FILTERING SCRIPT --}}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const filterSelect = document.getElementById('filterSelect');
+  const items = document.querySelectorAll('.reminder-item');
+
+  function applyFilter() {
+    const selected = filterSelect.value.toLowerCase().trim();
+    items.forEach(item => {
+      const status = (item.dataset.status || '').toLowerCase().trim();
+      item.style.display = (selected === 'all' || status === selected) ? 'flex' : 'none';
+    });
+  }
+
+  filterSelect.addEventListener('change', applyFilter);
+  applyFilter(); // jalan saat pertama load
+});
+</script>
 
 @endsection
