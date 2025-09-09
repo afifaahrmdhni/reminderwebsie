@@ -9,9 +9,12 @@ return new class extends Migration {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reminder_id')->constrained('reminders')->onDelete('cascade');
-            $table->string('channel');
-            $table->string('status')->default('pending');
+            $table->string('channel'); // whatsapp, email, dll
+            $table->string('recipient')->nullable(); // nomor WA/email tujuan
+            $table->text('message')->nullable();     // isi pesan yg dikirim
+            $table->string('status')->default('pending'); // pending, sent, failed
             $table->timestamp('sent_at')->nullable();
+            $table->timestamps();
         });
     }
 

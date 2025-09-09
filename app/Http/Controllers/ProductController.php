@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         return view('product-admin.index', [
-            'title' => 'Product admin',
+            'title' => 'Product-admin',
             'datas' => ReminderCategory::all(),
         ]);
     }

@@ -140,10 +140,10 @@ class ReminderController extends Controller
      */
     public function destroy(Reminder $reminder)
     {
-        $reminder->delete();
+        $reminder->delete(); // sekarang dia cuma isi deleted_at
 
         return redirect()
             ->route('reminders-admin.index')
-            ->with('success', 'Reminder berhasil dihapus!');
+            ->with('success', 'Reminder berhasil dipindahkan ke Archive!');
     }
 }

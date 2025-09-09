@@ -5,7 +5,7 @@
 @endsection
 
 @section ('content')
-<div class="mt-20 bg-white rounded-xl shadow-sm border border-gray-200">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200">
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-lg font-semibold text-gray-800">Kategori/Product Terbaru</h3>
