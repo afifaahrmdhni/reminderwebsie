@@ -13,10 +13,13 @@
            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
         </a>
       </li>
+      <li class="nav-item text-danger px-3">
+  {{ Auth::id() }} - {{ Auth::user()->email }} - {{ Auth::user()->role }}
+</li>
 
       @if(Auth::check())
-        {{-- Hanya Admin (role_id = 1) --}}
-        @if(Auth::user()->role_id == 1)  
+        {{-- Hanya Admin --}}
+        @if(Auth::user()->role === 'Admin')  
         <li class="nav-item">
           <a href="{{ route('users-admin.index') }}" 
              class="nav-link px-3 py-2 rounded {{ request()->routeIs('users-admin*') ? 'active text-primary bg-blue-50' : 'text-dark' }}">
@@ -25,8 +28,8 @@
         </li>
         @endif
 
-        {{-- Admin, Super User, Multi User (role_id 1,2,3) --}}
-        @if(in_array(Auth::user()->role_id, [1,2,3]))
+        {{-- Admin, Super User, Multi User --}}
+        @if(in_array(Auth::user()->role, ['Admin', 'Super User', 'Multi User']))
         <li class="nav-item">
           <a href="{{ route('product-admin.index') }}" 
              class="nav-link px-3 py-2 rounded {{ request()->routeIs('product-admin.*') ? 'active text-primary bg-blue-50' : 'text-dark' }}">

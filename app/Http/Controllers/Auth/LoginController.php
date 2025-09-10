@@ -22,15 +22,12 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
-            // cek apakah user aktif
             if (! $user->is_active) {
                 Auth::logout();
                 return back()->with('error', 'Akun Anda belum aktif, hubungi admin.');
             }
-
             $request->session()->regenerate();
-            return redirect()->intended('/'); // arahkan ke dashboard
+            return redirect()->intended('/');
         }
 
         return back()->with('error', 'Email atau password salah.');

@@ -14,42 +14,31 @@
 
         <form action="{{ route('users-admin.store') }}" method="POST">
             @csrf
-
-            {{-- Name --}}
             <div class="mb-3">
                 <label for="name" class="form-label">Full Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
-
-            {{-- Email --}}
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
-
-            {{-- Nomor Whatsapp --}}
             <div class="mb-3">
-                <label for="whatsapp" class="form-label">Nomor Whatsaap</label>
-                <input type="text" class="form-control" id="whatsapp" name="phone" required>
+                <label for="phone" class="form-label">Nomor WhatsApp</label>
+                <input type="text" class="form-control" id="phone" name="phone">
             </div>
-
-            {{-- Password --}}
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-
-            {{-- Role --}}
             <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role_id" name="role_id" required>
+                <label class="form-label">Role</label>
+                <select name="role" class="form-select" required>
                     <option value="" disabled selected>-- Select Role --</option>
-                    <option value="1">Super User</option>
-                    <option value="2">Multi User</option>
-                    <option value="3">Basic User</option>
+                    @foreach($roles as $role)
+                        <option value="{{ $role }}">{{ $role }}</option>
+                    @endforeach
                 </select>
             </div>
-
             <button type="submit" class="btn btn-primary">Create User</button>
         </form>
     </div>
@@ -60,12 +49,12 @@
         <table class="table table-striped table-bordered align-middle">
             <thead class="table-light">
                 <tr class="text-center">
-                    <th style="width: 50px;">#</th>
-                    <th style="width: 180px;">Name</th>
-                    <th style="width: 200px;">Email</th>
-                    <th style="width: 150px;">Role</th>
-                    <th style="width: 150px;">Nomor</th>
-                    <th style="width: 120px;">Action</th>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,25 +63,15 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->role_name }}</td>
+                        <td>{{ $user->role }}</td>
                         <td>{{ $user->phone }}</td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-
-                                {{-- Tombol Edit --}}
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-primary"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editUserModal{{ $user->id }}">
-                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}">
+                                    Edit
                                 </button>
-
-                                {{-- Tombol Delete --}}
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-danger"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#deleteUserModal{{ $user->id }}">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ $user->id }}">
+                                    Delete
                                 </button>
                             </div>
                         </td>
@@ -120,14 +99,20 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Nomor WhatsApp</label>
-                                            <input type="tel" name="phone" value="{{ $user->phone }}" class="form-control" required>
+                                            <input type="text" name="phone" value="{{ $user->phone }}" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Password (kosongkan jika tidak diubah)</label>
+                                            <input type="password" name="password" class="form-control">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Role</label>
-                                            <select name="role_id" class="form-select" required>
-                                                <option value="1" {{ $user->role_id == 1 ? 'selected' : '' }}>Super User</option>
-                                                <option value="2" {{ $user->role_id == 2 ? 'selected' : '' }}>Multi User</option>
-                                                <option value="3" {{ $user->role_id == 3 ? 'selected' : '' }}>Basic User</option>
+                                            <select name="role" class="form-select" required>
+                                                @foreach($roles as $role)
+                                                    <option value="{{ $role }}" {{ $user->role == $role ? 'selected' : '' }}>
+                                                        {{ $role }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

@@ -20,7 +20,7 @@ class RoleMiddleware
         }
 
         // pastikan role_id cocok
-        if (!in_array($user->role_id, $roles)) {
+        if (!in_array($user->role, $roles)) {
             abort(403, 'Unauthorized.');
         }
 

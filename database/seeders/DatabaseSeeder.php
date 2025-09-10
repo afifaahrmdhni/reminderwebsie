@@ -13,17 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-        RoleSeeder::class,
-        UserSeeder::class,
-        ReminderCategorySeeder::class,
-        // tambah seeder lain kalau mau isi reminder awal
-    ]);
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(UserSeeder::class);
     }
 }

@@ -5,97 +5,66 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $users = User::with('role')->get(); // ambil user beserta role
-        $roles = \App\Models\Role::all();   // ambil semua role
+        $users = User::all();
+        $roles = ['Admin', 'Super User', 'Multi User', 'Basic User']; // roles string
 
         return view('users-admin.index', compact('users', 'roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-       
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-
-        // dd($request->all());
         $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'phone' => 'nullable|string|min:10|max:20',
-        'password' => 'required|string|min:8',
-        'role_id' => 'nullable|integer',
-        'is_active' => 'nullable|boolean',
-    ]);
-
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'nullable|string|min:10|max:20',
+            'password' => 'required|string|min:8',
+            'role' => 'required|string',
+        ]);
+        Log::info('STORE DATA', $request->all());
         User::create([
-        'name'     => $request->name,
-        'email'    => $request->email,
-        'phone'    => $request->phone,
-        'password' => Hash::make($request->password),
-        'role_id'  => $request->role_id,  // <-- penting
-        'is_active'=> $request->is_active ?? true,
-    ]);
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'is_active' => true,
+        ]);
 
-    return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
-
+        return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
     }
 
-
-    public function searchUser(Request $request)
-{
-    $query = $request->get('q');
-
-    $users = User::where('email', 'LIKE', "%{$query}%")
-                 ->select('email', 'phone')
-                 ->get();
-
-    return response()->json($users);
-}
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'phone' => 'nullable|string|min:10|max:20',
+            'role' => 'required|string',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->role = $request->role;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('users-admin.index')->with('success', 'User berhasil diperbarui');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $user = User::findOrFail($id);

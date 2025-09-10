@@ -10,36 +10,36 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Admin default
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@example.com',
-            'password' => Hash::make('admin123'), // 🔑 password default
-            'role_id' => 4, // Admin
+            'password' => Hash::make('admin123'),
+            'role' => 'Admin',
+            'is_active' => true,
         ]);
 
-        // Super User
         User::create([
             'name' => 'Super User',
             'email' => 'super@example.com',
             'password' => Hash::make('super123'),
-            'role_id' => 2,
+            'role' => 'Super User',
+            'is_active' => true,
         ]);
 
-        // Multi User
         User::create([
             'name' => 'Multi User',
             'email' => 'multi@example.com',
             'password' => Hash::make('multi123'),
-            'role_id' => 3,
+            'role' => 'Multi User',
+            'is_active' => true,
         ]);
 
-        // Basic User
         User::create([
             'name' => 'Basic User',
             'email' => 'basic@example.com',
             'password' => Hash::make('basic123'),
-            'role_id' => 1,
+            'role' => 'Basic User',
+            'is_active' => true,
         ]);
     }
 }
