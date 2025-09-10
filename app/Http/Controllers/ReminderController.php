@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reminder;
 use App\Models\ReminderCategory;
+use App\Models\User;
 
 class ReminderController extends Controller
 {
-    /**
-     * Display a listing of reminders.
-     */
     public function index(Request $request)
     {
-        $status = $request->get('status', 'all'); // default "all"
+        $status = $request->get('status', 'all'); 
         $today  = \Carbon\Carbon::today();
 
         $reminders = Reminder::with('category')
@@ -42,13 +40,10 @@ class ReminderController extends Controller
             'title'      => 'Reminders Admin',
             'reminders'  => $reminders,
             'categories' => ReminderCategory::all(),
-            'status'     => $status, // biar bisa tahu dropdown mana yang kepilih
+            'status'     => $status,
         ]);
     }
 
-    /**
-     * Store a newly created reminder.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -60,14 +55,12 @@ class ReminderController extends Controller
             'recipient_phones' => 'nullable|string',
         ]);
 
-        // Wajib minimal 1 kontak diisi
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
             return back()->withErrors([
                 'recipient_emails' => 'Isi minimal satu email atau nomor telepon.',
             ]);
         }
 
-        // Simpan jadi array JSON (auto ke cast di model jika pakai casts json)
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
             ? array_map('trim', explode(',', $validated['recipient_emails']))
             : null;
@@ -83,9 +76,6 @@ class ReminderController extends Controller
             ->with('success', 'Reminder berhasil dibuat!');
     }
 
-    /**
-     * Show the form for editing the specified reminder.
-     */
     public function edit(Reminder $reminder)
     {
         return view('reminders-admin.edit', [
@@ -94,15 +84,11 @@ class ReminderController extends Controller
         ]);
     }
 
-
     public function createMessageForm() {
-    $users = User::select('email', 'phone')->get();
-    return view('reminder-admin.create', compact('reminders'));
-}
+        $users = User::select('email', 'phone')->get();
+        return view('reminder-admin.create', compact('users'));
+    }
 
-    /**
-     * Update the specified reminder.
-     */
     public function update(Request $request, Reminder $reminder)
     {
         $validated = $request->validate([
@@ -135,15 +121,35 @@ class ReminderController extends Controller
             ->with('success', 'Reminder berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified reminder.
-     */
     public function destroy(Reminder $reminder)
     {
-        $reminder->delete(); // sekarang dia cuma isi deleted_at
-
+        $reminder->delete();
         return redirect()
             ->route('reminders-admin.index')
             ->with('success', 'Reminder berhasil dipindahkan ke Archive!');
+    }
+
+    public function archive()
+    {
+        $reminders = Reminder::onlyTrashed()->get();
+        return view('archive-admin.index', compact('reminders'));
+    }
+
+    public function restore($id)
+    {
+        $reminder = Reminder::onlyTrashed()->findOrFail($id);
+        $reminder->restore();
+
+        return redirect()->route('archive-admin.index')
+            ->with('success', 'Reminder berhasil direstore!');
+    }
+
+    public function forceDelete($id)
+    {
+        $reminder = Reminder::onlyTrashed()->findOrFail($id);
+        $reminder->forceDelete();
+
+        return redirect()->route('archive-admin.index')
+            ->with('success', 'Reminder dihapus permanen!');
     }
 }

@@ -3,46 +3,43 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('users')->insert([
-            [
-                'name' => 'Super Admin',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Karyawan Level 1',
-                'email' => 'level1@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Karyawan Level 2',
-                'email' => 'level2@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Karyawan Level 3',
-                'email' => 'level3@example.com',
-                'password' => Hash::make('password'),
-                'role_id' => 4,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        // Admin default
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin123'), // 🔑 password default
+            'role_id' => 4, // Admin
+        ]);
+
+        // Super User
+        User::create([
+            'name' => 'Super User',
+            'email' => 'super@example.com',
+            'password' => Hash::make('super123'),
+            'role_id' => 2,
+        ]);
+
+        // Multi User
+        User::create([
+            'name' => 'Multi User',
+            'email' => 'multi@example.com',
+            'password' => Hash::make('multi123'),
+            'role_id' => 3,
+        ]);
+
+        // Basic User
+        User::create([
+            'name' => 'Basic User',
+            'email' => 'basic@example.com',
+            'password' => Hash::make('basic123'),
+            'role_id' => 1,
         ]);
     }
 }

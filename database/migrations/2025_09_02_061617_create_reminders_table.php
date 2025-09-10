@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->json('recipient_emails')->nullable(); // bisa lebih dari 1
             $table->json('recipient_phones')->nullable(); // bisa lebih dari 1
             $table->timestamps();
+            $table->softDeletes(); // <--- tambahin ini
         });
     }
 

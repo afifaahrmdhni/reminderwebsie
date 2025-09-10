@@ -10,11 +10,14 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone')->nullable();         
-            $table->string('photo')->nullable();   // foto profil user
+            $table->string('phone')->nullable();
+            $table->string('photo')->nullable();
             $table->string('password');
-            $table->foreignId('role_id')->nullable();
             $table->boolean('is_active')->default(true);
+
+            // role_id duluan, BELUM ada foreign key
+            $table->unsignedBigInteger('role_id')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

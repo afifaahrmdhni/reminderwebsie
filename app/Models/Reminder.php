@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes; // ⬅️ tambahin
+use Illuminate\Database\Eloquent\SoftDeletes; // ⬅️ tambahin ini
 
 class Reminder extends Model
 {
-    use HasFactory, SoftDeletes; // ⬅️ aktifin soft delete
+    use HasFactory, SoftDeletes; // ⬅️ tambahin SoftDeletes
 
     protected $fillable = [
         'title',
         'description',
-        'category_id',
         'due_date',
+        'category_id',
         'recipient_emails',
         'recipient_phones',
     ];
@@ -22,9 +22,8 @@ class Reminder extends Model
     protected $casts = [
         'recipient_emails' => 'array',
         'recipient_phones' => 'array',
-        'due_date'         => 'date',
+        'due_date'        => 'datetime',
     ];
-
     public function category()
     {
         return $this->belongsTo(ReminderCategory::class, 'category_id');
