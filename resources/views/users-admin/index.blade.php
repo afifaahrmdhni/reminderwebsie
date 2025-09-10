@@ -11,6 +11,24 @@
     {{-- Form Tambah User --}}
     <div class="card p-4 mb-4 shadow rounded">
         <h3 class="text-lg font-semibold mb-3">Add New User</h3>
+        
+        {{-- Alert --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Ups! Ada yang salah:</strong>
+                <ul class="mb-0 mt-2">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <form action="{{ route('users-admin.store') }}" method="POST">
             @csrf
