@@ -9,9 +9,11 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-lg font-semibold text-gray-800">Kategori/Product Terbaru</h3>
-            <button class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                <i class="fa-solid fa-plus me-1"></i> Tambah Produk/Kategori
-            </button>
+            @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+                <button class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <i class="fa-solid fa-plus me-1"></i> Tambah Produk/Kategori
+                </button>
+            @endif
         </div>
 
         {{-- Modal Create --}}
@@ -49,22 +51,24 @@
                     {{-- Action --}}
                     <td class="px-6 py-4 text-sm text-center">
                         <div class="flex items-center justify-center space-x-2">
-                            {{-- Tombol Edit --}}
-                            <button type="button"
-                                class="btn btn-warning btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editCategoryModal{{ $item->id }}">
-                                Edit
-                            </button>
+                            @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+                                {{-- Tombol Edit --}}
+                                <button type="button"
+                                    class="btn btn-warning btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal{{ $item->id }}">
+                                    Edit
+                                </button>
 
-                            {{-- Tombol Delete (pakai modal konfirmasi) --}}
-                            <button type="button"
-                                class="btn btn-danger btn-sm"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#confirmDeleteModal"
-                                onclick="setDeleteAction('{{ route('product-admin.destroy', $item->id) }}')">
-                                Hapus
-                            </button>
+                                {{-- Tombol Delete (pakai modal konfirmasi) --}}
+                                <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#confirmDeleteModal"
+                                    onclick="setDeleteAction('{{ route('product-admin.destroy', $item->id) }}')">
+                                    Hapus
+                                </button>
+                            @endif
                         </div>
                     </td>
                 </tr>

@@ -11,7 +11,7 @@ class ReminderController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->get('status', 'all');
+        $status = $request->get('status', 'all'); 
         $today  = \Carbon\Carbon::today();
 
         $reminders = Reminder::with('category')
@@ -51,10 +51,8 @@ class ReminderController extends Controller
             'category_id'      => 'required|exists:reminder_categories,id',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string',
-            'recipient_emails' => 'nullable|array',
-            'recipient_emails.*' => 'nullable|email',
-            'recipient_phones' => 'nullable|array',
-            'recipient_phones.*' => 'nullable|string',
+            'recipient_emails' => 'nullable|string',
+            'recipient_phones' => 'nullable|string',
         ]);
 
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
@@ -64,11 +62,11 @@ class ReminderController extends Controller
         }
 
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
-            ? array_map('trim', $validated['recipient_emails'])
+            ? array_map('trim', explode(',', $validated['recipient_emails']))
             : null;
 
         $validated['recipient_phones'] = !empty($validated['recipient_phones'])
-            ? array_map('trim', $validated['recipient_phones'])
+            ? array_map('trim', explode(',', $validated['recipient_phones']))
             : null;
 
         Reminder::create($validated);
@@ -86,8 +84,7 @@ class ReminderController extends Controller
         ]);
     }
 
-    public function createMessageForm()
-    {
+    public function createMessageForm() {
         $users = User::select('email', 'phone')->get();
         return view('reminder-admin.create', compact('users'));
     }
@@ -99,10 +96,8 @@ class ReminderController extends Controller
             'category_id'      => 'required|exists:reminder_categories,id',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string',
-            'recipient_emails' => 'nullable|array',
-            'recipient_emails.*' => 'nullable|email',
-            'recipient_phones' => 'nullable|array',
-            'recipient_phones.*' => 'nullable|string',
+            'recipient_emails' => 'nullable|string',
+            'recipient_phones' => 'nullable|string',
         ]);
 
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
@@ -112,11 +107,11 @@ class ReminderController extends Controller
         }
 
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
-            ? array_map('trim', $validated['recipient_emails'])
+            ? array_map('trim', explode(',', $validated['recipient_emails']))
             : null;
 
         $validated['recipient_phones'] = !empty($validated['recipient_phones'])
-            ? array_map('trim', $validated['recipient_phones'])
+            ? array_map('trim', explode(',', $validated['recipient_phones']))
             : null;
 
         $reminder->update($validated);
@@ -129,9 +124,32 @@ class ReminderController extends Controller
     public function destroy(Reminder $reminder)
     {
         $reminder->delete();
-
         return redirect()
             ->route('reminders-admin.index')
             ->with('success', 'Reminder berhasil dipindahkan ke Archive!');
+    }
+
+    public function archive()
+    {
+        $reminders = Reminder::onlyTrashed()->get();
+        return view('archive-admin.index', compact('reminders'));
+    }
+
+    public function restore($id)
+    {
+        $reminder = Reminder::onlyTrashed()->findOrFail($id);
+        $reminder->restore();
+
+        return redirect()->route('archive-admin.index')
+            ->with('success', 'Reminder berhasil direstore!');
+    }
+
+    public function forceDelete($id)
+    {
+        $reminder = Reminder::onlyTrashed()->findOrFail($id);
+        $reminder->forceDelete();
+
+        return redirect()->route('archive-admin.index')
+            ->with('success', 'Reminder dihapus permanen!');
     }
 }

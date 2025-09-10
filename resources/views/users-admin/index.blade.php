@@ -120,7 +120,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Nomor WhatsApp</label>
-                                            <input type="number" name="phone" value="{{ $user->phone }}" class="form-control" required>
+                                            <input type="tel" name="phone" value="{{ $user->phone }}" class="form-control" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Role</label>
