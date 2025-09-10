@@ -41,12 +41,12 @@
 
           {{-- Recipient Email(s) --}}
           <label for="recipientEmail">Recipient Email(s)</label>
-<input type="text" id="recipientEmail" class="form-control" autocomplete="off">
+<input type="text" id="recipientEmail" class="form-control" autocomplete="off" name="recipient_emails[]">
 <div id="emailList" class="dropdown-menu" style="display:block; position:absolute; display:none"></div>
 {{-- Recipient phone --}}
-<label for="recipientPhone">Recipient Phone(s)</label>
-<input type="text" id="recipientPhone" class="form-control">
-    </div>
+  <label for="recipientPhone">Recipient Phone(s)</label>
+  <input type="text" id="recipientPhone" name="recipient_phones[]" class="form-control">
+      </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

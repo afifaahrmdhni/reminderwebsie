@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reminder;
 use App\Models\ReminderCategory;
+use App\Models\User;
 
 class ReminderController extends Controller
 {
-    /**
-     * Display a listing of reminders.
-     */
     public function index(Request $request)
     {
-        $status = $request->get('status', 'all'); // default "all"
+        $status = $request->get('status', 'all');
         $today  = \Carbon\Carbon::today();
 
         $reminders = Reminder::with('category')
@@ -42,13 +40,10 @@ class ReminderController extends Controller
             'title'      => 'Reminders Admin',
             'reminders'  => $reminders,
             'categories' => ReminderCategory::all(),
-            'status'     => $status, // biar bisa tahu dropdown mana yang kepilih
+            'status'     => $status,
         ]);
     }
 
-    /**
-     * Store a newly created reminder.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -56,24 +51,24 @@ class ReminderController extends Controller
             'category_id'      => 'required|exists:reminder_categories,id',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string',
-            'recipient_emails' => 'nullable|string',
-            'recipient_phones' => 'nullable|string',
+            'recipient_emails' => 'nullable|array',
+            'recipient_emails.*' => 'nullable|email',
+            'recipient_phones' => 'nullable|array',
+            'recipient_phones.*' => 'nullable|string',
         ]);
 
-        // Wajib minimal 1 kontak diisi
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
             return back()->withErrors([
                 'recipient_emails' => 'Isi minimal satu email atau nomor telepon.',
             ]);
         }
 
-        // Simpan jadi array JSON (auto ke cast di model jika pakai casts json)
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
-            ? array_map('trim', explode(',', $validated['recipient_emails']))
+            ? array_map('trim', $validated['recipient_emails'])
             : null;
 
         $validated['recipient_phones'] = !empty($validated['recipient_phones'])
-            ? array_map('trim', explode(',', $validated['recipient_phones']))
+            ? array_map('trim', $validated['recipient_phones'])
             : null;
 
         Reminder::create($validated);
@@ -83,9 +78,6 @@ class ReminderController extends Controller
             ->with('success', 'Reminder berhasil dibuat!');
     }
 
-    /**
-     * Show the form for editing the specified reminder.
-     */
     public function edit(Reminder $reminder)
     {
         return view('reminders-admin.edit', [
@@ -94,15 +86,12 @@ class ReminderController extends Controller
         ]);
     }
 
+    public function createMessageForm()
+    {
+        $users = User::select('email', 'phone')->get();
+        return view('reminder-admin.create', compact('users'));
+    }
 
-    public function createMessageForm() {
-    $users = User::select('email', 'phone')->get();
-    return view('reminder-admin.create', compact('reminders'));
-}
-
-    /**
-     * Update the specified reminder.
-     */
     public function update(Request $request, Reminder $reminder)
     {
         $validated = $request->validate([
@@ -110,8 +99,10 @@ class ReminderController extends Controller
             'category_id'      => 'required|exists:reminder_categories,id',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string',
-            'recipient_emails' => 'nullable|string',
-            'recipient_phones' => 'nullable|string',
+            'recipient_emails' => 'nullable|array',
+            'recipient_emails.*' => 'nullable|email',
+            'recipient_phones' => 'nullable|array',
+            'recipient_phones.*' => 'nullable|string',
         ]);
 
         if (empty($validated['recipient_emails']) && empty($validated['recipient_phones'])) {
@@ -121,11 +112,11 @@ class ReminderController extends Controller
         }
 
         $validated['recipient_emails'] = !empty($validated['recipient_emails'])
-            ? array_map('trim', explode(',', $validated['recipient_emails']))
+            ? array_map('trim', $validated['recipient_emails'])
             : null;
 
         $validated['recipient_phones'] = !empty($validated['recipient_phones'])
-            ? array_map('trim', explode(',', $validated['recipient_phones']))
+            ? array_map('trim', $validated['recipient_phones'])
             : null;
 
         $reminder->update($validated);
@@ -135,12 +126,9 @@ class ReminderController extends Controller
             ->with('success', 'Reminder berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified reminder.
-     */
     public function destroy(Reminder $reminder)
     {
-        $reminder->delete(); // sekarang dia cuma isi deleted_at
+        $reminder->delete();
 
         return redirect()
             ->route('reminders-admin.index')
