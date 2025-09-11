@@ -34,7 +34,7 @@
             @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" required >
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
@@ -42,11 +42,11 @@
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label">Nomor WhatsApp</label>
-                <input type="text" class="form-control" id="phone" name="phone">
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="menggunakan 62, contoh 6280xxx">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" required placeholder="minimal 8 karakter">
             </div>
             <div class="mb-3">
                 <label class="form-label">Role</label>
