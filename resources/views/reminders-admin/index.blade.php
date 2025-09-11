@@ -188,8 +188,9 @@
               </div>
 
               {{-- FOOTER --}}
-              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
+              
               <div class="modal-footer d-flex justify-content-between">
+                @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
                 <div>
                   <button class="btn btn-warning text-white" 
                           data-bs-toggle="modal" 
@@ -202,9 +203,11 @@
                     Delete
                   </button>
                 </div>
+                 @endif
+             
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
               </div>
-              @endif
+
             </div>
           </div>
         </div>
