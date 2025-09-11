@@ -39,28 +39,30 @@
             <textarea class="form-control" name="description" rows="3" placeholder="Describe the item or service..."></textarea>
           </div>
 
-
           {{-- Recipient Email(s) --}}
-<div class="mb-3 position-relative">
-    <label for="recipient_email">Recipient Email(s)</label>
-    <div id="email-wrapper">
-        <div class="position-relative mb-2">
-            <input type="text" class="form-control recipient_email" name="recipient_email[]" placeholder="contoh: a@gmail.com" autocomplete="off">
-            <div class="list-group position-absolute w-100 emailSuggestions" style="z-index:1000;"></div>
-        </div>
-    </div>
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEmail()">+ Tambah Email</button>
-</div>
+          <div class="mb-3 position-relative">
+              <label for="recipient_email">Recipient Email(s)</label>
+              <div id="email-wrapper">
+                  <div class="position-relative mb-2">
+                      <input type="text" class="form-control recipient_email" name="recipient_email[]" placeholder="contoh: a@gmail.com" autocomplete="off">
+                      <div class="list-group position-absolute w-100 emailSuggestions" style="z-index:1000;"></div>
+                  </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEmail()">+ Tambah Email</button>
+          </div>
 
-{{-- Recipient Phone(s) --}}
-<div class="mb-3">
-    <label for="recipient_phone">Recipient Phone(s)</label>
-    <div id="phone-wrapper">
-        <input type="text" class="form-control mb-2 recipient_phone" name="recipient_phone[]" placeholder="contoh: 08123456789">
-    </div>
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPhone()">+ Tambah No HP</button>
-</div>
-          
+          {{-- Recipient Phone(s) --}}
+          <div class="mb-3">
+              <label for="recipient_phone">Recipient Phone(s)</label>
+              <div id="phone-wrapper">
+                  <input type="text" class="form-control mb-2 recipient_phone" name="recipient_phone[]" placeholder="contoh: 08123456789">
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPhone()">+ Tambah No HP</button>
+          </div>
+
+
+        </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="submit" class="btn btn-primary">Create Reminder</button>

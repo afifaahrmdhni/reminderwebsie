@@ -118,8 +118,8 @@
             </div>
             <div class="modal-body">
               <p><b>Expires:</b> {{ $reminder->due_date?->format('F d, Y') ?? '-' }}</p>
-              <p>{{ $reminder->description }}</p>
-              <p><b>Notifications:</b> ✉️ 💬 Email & WhatsApp</p>
+              <p><b>Description:</b> {{ $reminder->description }}</p>
+              <p><b>Notifications:</b></p>
               @if ($reminder->recipient_emails)
                 <p><b>Recipients (Email):</b> {{ implode(', ', $reminder->recipient_emails) }}</p>
               @endif
