@@ -161,7 +161,7 @@
               {{-- BODY --}}
               <div class="modal-body" style="max-width: 500px; word-wrap: break-word; white-space: normal;">
                 <p class="mb-2">
-                  <b>📅 Expiration:</b> 
+                  <b>📅 Expired:</b> 
                   {{ $reminder->due_date?->format('F d, Y') ?? '-' }}
                 </p>
 

@@ -16,16 +16,50 @@
         </div>
       </div>
 
-      <!-- Right -->
-      <div class="flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-full overflow-hidden">
-          <img src="img/etmin.jpeg" >
-        </div>
+      
+  <!-- Right -->
+<div class="relative" id="userDropdownWrapper">
+    <div class="flex items-center space-x-2 cursor-pointer" id="userDropdownToggle">
         <p>{{ Auth::user()->name }}</p>
-         <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-          <i class="fas fa-bell text-xl"></i>
-        </button>
-      </div>
+        <i class="fa-solid fa-circle-user text-2xl text-gray-500"></i>
     </div>
-  </div>
+
+    <!-- Dropdown -->
+    <div id="userDropdown" 
+         class="hidden absolute right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg p-4 z-50">
+        
+        <p class="font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+        <p class="text-sm text-gray-600">{{ Auth::user()->email }}</p>
+        <p class="text-sm text-gray-600">{{ Auth::user()->phone ?? 'No phone' }}</p>
+
+        <hr class="my-2">
+
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" 
+                    class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-gray-100">
+                <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggle = document.getElementById("userDropdownToggle");
+        const dropdown = document.getElementById("userDropdown");
+        const wrapper = document.getElementById("userDropdownWrapper");
+
+        toggle.addEventListener("click", function () {
+            dropdown.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", function (e) {
+            if (!wrapper.contains(e.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
+    });
+</script>
+
 </header>
