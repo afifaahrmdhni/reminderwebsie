@@ -18,12 +18,13 @@
 
       <!-- Right -->
       <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-          <i class="fas fa-bell text-xl"></i>
-        </button>
         <div class="w-12 h-12 rounded-full overflow-hidden">
           <img src="img/etmin.jpeg" >
         </div>
+        <p>{{ Auth::user()->name }}</p>
+         <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+          <i class="fas fa-bell text-xl"></i>
+        </button>
       </div>
     </div>
   </div>
