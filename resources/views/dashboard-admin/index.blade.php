@@ -192,7 +192,7 @@
             <strong>{{ $reminder->title }}</strong><br>
             <small class="text-muted">📅 {{ $reminder->due_date?->format('d M Y') }}</small>
           </div>
-          <div class="btn btn-primary">Reactivate</div>
+          <div href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{ $reminder->id }}">Reactivate</div>
         </li>
       @endforeach
     </ul>
