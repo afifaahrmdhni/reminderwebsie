@@ -26,6 +26,10 @@
     transform: translateY(-3px);
     box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
   }
+  .description-text {
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
+  }
 </style>
 
 <div class="container" style="padding-top: 16px;">
@@ -45,11 +49,12 @@
             <option value="expired" {{ $status == 'expired' ? 'selected' : '' }}>Expired</option>
         </select>
       </form>
-
+      @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User' || auth()->user()->role === 'Multi User')
       <button class="btn btn-primary d-flex align-items-center"
               data-bs-toggle="modal" data-bs-target="#createReminderModal">
         <i class="fa-solid fa-plus me-1"></i> Tambah Reminder
       </button>
+      @endif
     </div>
   </div>
 
@@ -98,7 +103,8 @@
             <div style="font-size:14px; color:#374151;">
               📅 {{ $reminder->due_date ? \Carbon\Carbon::parse($reminder->due_date)->format('M d, Y') : '-' }}
             </div>
-            <p style="font-size:14px; color:#374151; -webkit-line-clamp: 2; overflow:hidden; text-overflow:ellipsis;">
+
+            <p style="padding-top:8px; font-size:14px; color:#374151; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
               {{ $reminder->description ?? '-' }}
             </p>
           </div>
@@ -120,29 +126,88 @@
       </div>
 
       {{-- Modal Detail --}}
-      <div class="modal fade" id="reminderModal{{ $reminder->id }}" tabindex="-1">
+      <div class="modal fade" id="reminderModal{{ $reminder->id }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content p-2">
-            <div class="modal-header bg-primary text-white">
-              <h5 class="modal-title">{{ $reminder->title }}</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <div class="modal-content rounded-3 shadow">
+            
+            {{-- HEADER --}}
+            <div class="modal-header bg-light d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <div style="font-size:40px;">📌</div>
+                <div>
+                  <h2 class="modal-title fw-bold mb-0" style="font-size:1.5rem;">
+                    {{ $reminder->title }}
+                  </h2>
+                  <small class="text-muted" style="font-size:1rem;">
+                    {{ $reminder->category->name ?? 'No Category' }}
+                  </small>
+                </div>
+              </div>
+              <div>
+                @if (is_null($due))
+                  <span class="badge bg-secondary fs-4">No Date</span>
+                @elseif ($daysLeft > 14)
+                  <span class="badge bg-success fs-4">Active</span>
+                @elseif ($daysLeft > 7)
+                  <span class="badge bg-warning text-dark fs-4">Upcoming</span>
+                @elseif ($daysLeft >= 0)
+                  <span class="badge bg-danger fs-4">Urgent</span>
+                @else
+                  <span class="badge bg-dark fs-4">Expired</span>
+                @endif
+              </div>
             </div>
-            <div class="modal-body">
-              <p><b>Category:</b> {{ $reminder->category->name ?? '-' }}</p>
-              <p><b>Expires:</b> {{ $reminder->due_date?->format('F d, Y') ?? '-' }}</p>
-              <p><b>Description:</b> {{ $reminder->description ?? '-' }}</p>
-              <p><b>Emails:</b> {{ $reminder->recipient_emails ? implode(', ', $reminder->recipient_emails) : '-' }}</p>
-              <p><b>Phones:</b> {{ $reminder->recipient_phones ? implode(', ', $reminder->recipient_phones) : '-' }}</p>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal"
-                      data-bs-target="#editReminderModal{{ $reminder->id }}">Edit</button>
-              <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                      data-bs-target="#deleteReminderModal{{ $reminder->id }}">Delete</button>
+
+              {{-- BODY --}}
+              <div class="modal-body" style="max-width: 500px; word-wrap: break-word; white-space: normal;">
+                <p class="mb-2">
+                  <b>📅 Expiration:</b> 
+                  {{ $reminder->due_date?->format('F d, Y') ?? '-' }}
+                </p>
+
+                <div class="mb-2">
+                  <b>Description:</b>
+                  <p class="text-muted description-text mb-0">
+                    {{ $reminder->description ?? '-' }}
+                  </p>
+                </div>
+
+                <div class="mb-2">
+                  <b>Emails:</b>
+                  <p class="text-muted mb-0">
+                    {{ $reminder->recipient_emails ? implode(', ', $reminder->recipient_emails) : '-' }}
+                  </p>
+                </div>
+
+                <div class="mb-2">
+                  <b>Phones:</b>
+                  <p class="text-muted mb-0">
+                    {{ $reminder->recipient_phones ? implode(', ', $reminder->recipient_phones) : '-' }}
+                  </p>
+                </div>
+              </div>
+
+              {{-- FOOTER --}}
+              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
+              <div class="modal-footer d-flex justify-content-between">
+                <div>
+                  <button class="btn btn-warning text-white" 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#editReminderModal{{ $reminder->id }}">
+                    Edit
+                  </button>
+                  <button class="btn btn-danger" 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#deleteReminderModal{{ $reminder->id }}">
+                    Delete
+                  </button>
+                </div>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              </div>
+              @endif
             </div>
           </div>
         </div>
-      </div>
 
       {{-- Modal Edit --}}
       @include('reminders-admin.edit', ['reminder' => $reminder, 'categories' => $categories])

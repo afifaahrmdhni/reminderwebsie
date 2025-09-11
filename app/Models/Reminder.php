@@ -22,6 +22,7 @@ class Reminder extends Model
     protected $casts = [
         'recipient_emails' => 'array',
         'recipient_phones' => 'array',
+        'due_date' => 'datetime',
     ];
     public function category()
     {

@@ -9,7 +9,7 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="text-lg font-semibold text-gray-800">Kategori/Product Terbaru</h3>
-            @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+            @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
                 <button class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#categoryModal">
                     <i class="fa-solid fa-plus me-1"></i> Tambah Produk/Kategori
                 </button>
@@ -27,7 +27,9 @@
                     <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Nama</th>
                     <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-start">Deskripsi</th>
                     <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Jumlah Reminder</th>
+                    @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
                     <th class="px-6 py-3 text-sm font-semibold text-gray-700 text-center">Action</th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -51,7 +53,7 @@
                     {{-- Action --}}
                     <td class="px-6 py-4 text-sm text-center">
                         <div class="flex items-center justify-center space-x-2">
-                            @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+                            @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
                                 {{-- Tombol Edit --}}
                                 <button type="button"
                                     class="btn btn-warning btn-sm"

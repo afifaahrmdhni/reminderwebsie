@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Expiration Date</label>
-              <input type="date" class="form-control" name="due_date" required>
+              <input type="date" class="form-control" name="due_date">
             </div>
           </div>
 
@@ -40,13 +40,24 @@
           </div>
 
           {{-- Recipient Email(s) --}}
-          <label for="recipientEmail">Recipient Email(s)</label>
-<input type="text" id="recipientEmail" class="form-control" autocomplete="off" name="recipient_email[]">
-<div id="emailList" class="dropdown-menu" style="display:block; position:absolute; display:none"></div>
-{{-- Recipient phone --}}
-  <label for="recipientPhone">Recipient Phone(s)</label>
-  <input type="text" id="recipientPhone" name="recipient_phone[]" class="form-control">
-      </div>
+          <div class="mb-3">
+            <label for="recipientEmail">Recipient Email(s)</label>
+            <div id="email-wrapper">
+              <input type="email" class="form-control mb-2" name="recipient_email[]" placeholder="contoh: a@gmail.com">
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addEmail()">+ Tambah Email</button>
+          </div>
+
+          {{-- Recipient Phone(s) --}}
+          <div class="mb-3">
+            <label for="recipientPhone">Recipient Phone(s)</label>
+            <div id="phone-wrapper">
+              <input type="text" class="form-control mb-2" name="recipient_phone[]" placeholder="contoh: 08123456789">
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPhone()">+ Tambah No HP</button>
+          </div>
+
+        </div>
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -56,4 +67,26 @@
     </div>
   </div>
 </div>
+
+<script>
+function addEmail() {
+  const wrapper = document.getElementById('email-wrapper');
+  const input = document.createElement('input');
+  input.type = 'email';
+  input.name = 'recipient_email[]';
+  input.className = 'form-control mb-2';
+  input.placeholder = 'contoh: b@gmail.com';
+  wrapper.appendChild(input);
+}
+
+function addPhone() {
+  const wrapper = document.getElementById('phone-wrapper');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.name = 'recipient_phone[]';
+  input.className = 'form-control mb-2';
+  input.placeholder = 'contoh: 08234567890';
+  wrapper.appendChild(input);
+}
+</script>
 <!-- Modal End -->

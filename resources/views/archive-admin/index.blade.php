@@ -131,15 +131,18 @@
               {{-- Reactivate --}}
               <form method="POST" action="{{ route('archive-admin.restore', $reminder->id) }}">
                 @csrf
+              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User' || auth()->user()->role === 'Multi User')
                 <button class="btn btn-sm btn-outline-primary">Reactivate</button>
+              @endif
               </form>
-
+              @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Super User')
               {{-- Trigger Delete Modal --}}
               <button type="button" class="btn btn-sm btn-outline-danger"
                 data-bs-toggle="modal"
                 data-bs-target="#deleteArchiveModal{{ $reminder->id }}">
                 🗑️ Delete
               </button>
+              @endif
             </div>
           </div>
         </div>
