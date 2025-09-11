@@ -14,7 +14,6 @@
         </a>
       </li>
       <li class="nav-item text-danger px-3">
-  {{ Auth::id() }} - {{ Auth::user()->email }} - {{ Auth::user()->role }}
 </li>
 
       @if(Auth::check())
