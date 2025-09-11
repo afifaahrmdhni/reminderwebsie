@@ -33,7 +33,8 @@ Route::middleware(['auth', 'role:Admin,Super User,Multi User'])->group(function 
 // ==================== ALL ROLES ====================
 Route::middleware(['auth', 'role:Admin,Super User,Multi User,Basic User'])->group(function () {
     Route::resource('/reminder', ReminderController::class)->names('reminders-admin');
-
+    Route::get('/search-email', [UserController::class, 'searchEmail'])->name('search.email');
+    
     Route::prefix('archive-admin')->name('archive-admin.')->group(function () {
         Route::get('/', [ArchiveController::class, 'index'])->name('index');
         Route::post('/{id}/restore', [ArchiveController::class, 'restore'])->name('restore');

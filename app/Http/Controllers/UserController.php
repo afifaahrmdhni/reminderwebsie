@@ -39,6 +39,18 @@ class UserController extends Controller
         return redirect()->route('users-admin.index')->with('success', 'User berhasil ditambahkan');
     }
 
+    public function searchEmail(Request $request)
+{
+    $search = $request->get('q');
+
+    $users = User::where('email', 'LIKE', "%{$search}%")
+        ->limit(10)
+        ->get(['email', 'phone']);
+
+    return response()->json($users);
+}
+
+
     public function update(Request $request, $id)
     {
         $request->validate([

@@ -126,54 +126,80 @@
     });
   }
   </script>
-
-  <script>
-    const input = document.getElementById('password');
-const toggle = document.getElementById('toggle-password');
-
-toggle.addEventListener('click', () => {
-  input.type = input.type === 'password' ? 'text' : 'password';
-});
-  </script>
-
 <script>
-document.getElementById('recipientEmail').addEventListener('keyup', function() {
-    let query = this.value;
-    let dropdown = document.getElementById('emailList');
+function addEmail() {
+    let wrapper = document.getElementById("email-wrapper");
+    let div = document.createElement("div");
+    div.classList.add("position-relative", "mb-2");
+    div.innerHTML = `
+        <input type="text" class="form-control recipient_email" name="recipient_email[]" placeholder="contoh: a@gmail.com" autocomplete="off">
+        <div class="list-group position-absolute w-100 emailSuggestions" style="z-index:1000;"></div>
+    `;
+    wrapper.appendChild(div);
+    attachAutocomplete(div.querySelector(".recipient_email"), div.querySelector(".emailSuggestions"));
+}
 
-    if (query.length > 2) { // minimal 3 huruf baru cari
-        fetch(`/search-user?q=${query}`)
-            .then(response => response.json())  
-            .then(data => {
-                dropdown.innerHTML = "";
+function addPhone() {
+    let wrapper = document.getElementById("phone-wrapper");
+    let input = document.createElement("input");
+    input.type = "text";
+    input.classList.add("form-control", "mb-2", "recipient_phone");
+    input.name = "recipient_phone[]";
+    input.placeholder = "contoh: 08123456789";
+    wrapper.appendChild(input);
+}
 
-                if (data.length > 0) {
-                    dropdown.style.display = "block"; // tampilkan kalau ada hasil
-                    data.forEach(user => {
-                        let option = document.createElement("div");
-                        option.classList.add("dropdown-item");
-                        option.style.cursor = "pointer";
-                        option.innerText = user.email;
-                        option.onclick = function() {
-                            document.getElementById('recipientEmail').value = user.email;
-                            document.getElementById('recipientPhone').value = user.phone;
-                            dropdown.innerHTML = "";
-                            dropdown.style.display = "none"; // sembunyikan setelah pilih
-                        };
-                        dropdown.appendChild(option);
-                    });
-                } else {
-                    dropdown.style.display = "none"; // sembunyikan kalau kosong
-                }
-            });
-    } else {
-        dropdown.innerHTML = "";
-        dropdown.style.display = "none"; // sembunyikan kalau <3 huruf
-    }
+// === Autocomplete logic ===
+function attachAutocomplete(emailInput, suggestionBox) {
+    emailInput.addEventListener("keyup", function () {
+        let query = this.value.trim();
+
+        if (query.length >= 3) {
+            fetch(`{{ url('/search-email') }}?q=${query}`)
+                .then(res => res.json())
+                .then(data => {
+                    suggestionBox.innerHTML = "";
+                    if (data.length > 0) {
+                        data.forEach(user => {
+                            let item = document.createElement("a");
+                            item.href = "#";
+                            item.classList.add("list-group-item", "list-group-item-action");
+                            item.textContent = user.email;
+
+                            item.addEventListener("click", function (e) {
+                                e.preventDefault();
+                                emailInput.value = user.email;
+
+                                // Cari input phone pertama yang masih kosong, isi otomatis
+                                let phoneInputs = document.querySelectorAll(".recipient_phone");
+                                for (let phoneInput of phoneInputs) {
+                                    if (!phoneInput.value) {
+                                        phoneInput.value = user.phone || "";
+                                        break;
+                                    }
+                                }
+
+                                suggestionBox.innerHTML = "";
+                            });
+
+                            suggestionBox.appendChild(item);
+                        });
+                    }
+                })
+                .catch(err => console.error(err));
+        } else {
+            suggestionBox.innerHTML = "";
+        }
+    });
+}
+
+// attach autocomplete ke email pertama saat page load
+document.addEventListener("DOMContentLoaded", function () {
+    let firstEmail = document.querySelector(".recipient_email");
+    let firstSuggestions = document.querySelector(".emailSuggestions");
+    attachAutocomplete(firstEmail, firstSuggestions);
 });
-
 </script>
-
 
   <script src="{{ asset('front-end/js/bootstrap.bundle.min.js') }}"></script>
 </body>
