@@ -18,22 +18,12 @@
 
       <!-- Right -->
       <div class="flex items-center space-x-4">
-
-        <!-- Info User + Foto -->
-        <div class="flex items-center space-x-3">
-          <div class="text-right">
-            <div class="font-semibold text-gray-800">{{ Auth::user()->email }}</div>
-            <small class="text-gray-500">{{ Auth::user()->role }}</small>
-          </div>
-          <div class="w-12 h-12 rounded-full overflow-hidden border">
-            <img src="{{ asset('img/etmin.jpeg') }}" alt="Profile" class="object-cover w-full h-full" href="#">
-          </div>
-        </div>
-
         <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
           <i class="fas fa-bell text-xl"></i>
         </button>
-
+        <div class="w-12 h-12 rounded-full overflow-hidden">
+          <img src="img/etmin.jpeg" >
+        </div>
       </div>
     </div>
   </div>

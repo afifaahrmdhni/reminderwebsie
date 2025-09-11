@@ -12,6 +12,10 @@
            class="nav-link px-3 py-2 rounded {{ request()->routeIs('dashboard-admin.index') ? 'active text-primary bg-blue-50' : 'text-dark' }}">
            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
         </a>
+      </li>
+      <li class="nav-item text-danger px-3">
+  {{ Auth::id() }} - {{ Auth::user()->email }} - {{ Auth::user()->role }}
+</li>
 
       @if(Auth::check())
         {{-- Hanya Admin --}}
