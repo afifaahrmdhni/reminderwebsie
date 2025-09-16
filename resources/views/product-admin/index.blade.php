@@ -20,6 +20,14 @@
         @include('product-admin.create')
     </div>
 
+    {{-- ALERT SUCCESS --}}
+    @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <div class="overflow-x-auto">
         <table class="table-auto w-full border-collapse">
             <thead class="bg-gray-100">
@@ -118,5 +126,13 @@
 function setDeleteAction(url) {
     document.getElementById('deleteForm').action = url;
 }
+</script>
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+      let alert = new bootstrap.Alert(el);
+      alert.close();
+    });
+  }, 10000); // ilang otomatis setelah 10 detik
 </script>
 @endsection

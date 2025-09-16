@@ -7,21 +7,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form action="" method="POST">
-        @csrf
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Kategori barang/produk</label>
-            <input type="text" name="name" class="form-control" placeholder="Contoh: Software" required>
+      <form action="{{ route('product-admin.store') }}" method="POST">
+          @csrf
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label class="form-label">Kategori barang/produk</label>
+                  <input type="text" name="name" class="form-control" placeholder="Contoh: Software" required>
+              </div>
+              <div class="mb-3">
+                  <label class="form-label">Deskripsi barang/produk</label>
+                  <input type="text" name="deskripsi" class="form-control" placeholder="Maksimal 255 karakter.." required>
+              </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Deskripsi barang/produk</label>
-            <input type="text" name="deskripsi" class="form-control" placeholder="Maksimal 255 karakter.." required>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
           </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
       </form>
     </div> 
   </div>

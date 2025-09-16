@@ -34,6 +34,22 @@
 
 <div class="container" style="padding-top: 16px;">
 
+    {{-- ALERT BOOTSTRAP --}}
+  @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fa-solid fa-circle-xmark me-2"></i> {{ session('error') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  @endif
+  {{-- END ALERT --}}
+
   {{-- HEADER --}}
   <div class="d-flex align-items-center justify-content-between mb-4 px-3"
        style="background-color: #e5e7eb; border-radius: 12px; padding:12px 16px;">
@@ -215,6 +231,8 @@
       {{-- Modal Edit --}}
       @include('reminders-admin.edit', ['reminder' => $reminder, 'categories' => $categories])
 
+      
+
       {{-- Modal Delete --}}
       <div class="modal fade" id="deleteReminderModal{{ $reminder->id }}" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -241,6 +259,13 @@
     @endforelse
   </div>
 </div>
-
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+      let alert = new bootstrap.Alert(el);
+      alert.close();
+    });
+  }, 10000); // ilang otomatis setelah 10 detik
+</script>
 @endsection
 

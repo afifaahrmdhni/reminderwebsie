@@ -71,6 +71,23 @@
 </style>
 
 <div class="container py-4">
+
+  {{-- ALERT BOOTSTRAP --}}
+  @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fa-solid fa-circle-xmark me-2"></i> {{ session('error') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  @endif
+  {{-- END ALERT --}}
+
   <h2 class="mb-3 h2">Archived Reminders</h2>
 
   <div class="row g-3">
@@ -176,4 +193,14 @@
     @endforelse
   </div>
 </div>
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+      let alert = new bootstrap.Alert(el);
+      alert.close();
+    });
+  }, 10000); // ilang otomatis setelah 10 detik
+</script>
+
 @endsection

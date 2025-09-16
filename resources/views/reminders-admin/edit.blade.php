@@ -40,15 +40,17 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Recipient Email(s)</label>
-            <input type="text" name="recipient_emails" class="form-control"
-                   value="{{ $reminder->recipient_emails ? implode(', ', $reminder->recipient_emails) : '' }}">
+              <label class="form-label">Recipient Email(s)</label>
+              <input type="text" name="recipient_emails" class="form-control"
+                    placeholder="contoh: lama@gmail.com, baru@gmail.com"
+                    value="{{ old('recipient_emails', implode(', ', $reminder->recipient_emails ?? [])) }}">
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Recipient Phone(s)</label>
-            <input type="text" name="recipient_phones" class="form-control"
-                   value="{{ $reminder->recipient_phones ? implode(', ', $reminder->recipient_phones) : '' }}">
+              <label class="form-label">Recipient Phone(s)</label>
+              <input type="text" name="recipient_phones" class="form-control"
+                    placeholder="contoh: 08123456789, 08987654321"
+                    value="{{ old('recipient_phones', implode(', ', $reminder->recipient_phones ?? [])) }}"> {{-- ⬅️ UPDATE --}}
           </div>
         </div>
 

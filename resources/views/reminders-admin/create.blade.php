@@ -13,7 +13,7 @@
           {{-- Name / Type --}}
           <div class="mb-3">
             <label class="form-label">Name / Type</label>
-            <input type="text" class="form-control" name="title" placeholder="e.g., WebApp Domain" required>
+            <input type="text" class="form-control" name="title" value="{{ old('title') }}" placeholder="e.g., WebApp Domain" required>
           </div>
 
           {{-- Category & Expiration --}}
@@ -23,20 +23,20 @@
               <select class="form-select" name="category_id" required>
                 <option value="">Select a category</option>
                 @foreach ($categories as $cat)
-                  <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                  <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                 @endforeach
               </select>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Expiration Date</label>
-              <input type="date" class="form-control" name="due_date">
+              <input type="date" class="form-control" name="due_date" value="{{ old('due_date') }}">
             </div>
           </div>
 
           {{-- Description --}}
           <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea class="form-control" name="description" rows="3" placeholder="Describe the item or service..."></textarea>
+            <textarea class="form-control" name="description" rows="3" placeholder="Describe the item or service...">{{ old('description') }}</textarea>
           </div>
 
           {{-- Recipient Email(s) --}}
@@ -59,8 +59,6 @@
               </div>
               <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPhone()">+ Tambah No HP</button>
           </div>
-
-
         </div>
 
         <div class="modal-footer">
